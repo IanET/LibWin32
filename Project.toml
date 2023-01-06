@@ -1,0 +1,7 @@
+name = "LibWin32"
+uuid = "c0df6290-90eb-481a-baee-d64c549a320a"
+version = "0.1.0"
+authors = ["Ian Ellison-Taylor <ian@ellison-taylor.com>"]
+
+[deps]
+CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
