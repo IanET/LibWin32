@@ -1,18 +1,4 @@
-# module LibGdi32
-
 using CEnum
-
-# 
-# Automatically generated file - do not edit
-#
-# const User32 = "user32.dll"
-# const Kernel32 = "kernel32.dll"
-const Gdi32 = "Gdi32.dll"
-
-# macro L_str(s) Base.cconvert(Cwstring, s) end
-
-# MAKEINTRESOURCEW(i) = LPWSTR(i)
-
 
 
 
@@ -89,8 +75,9 @@ const _WIN32_WINNT = 0x0501
 
 const wchar_t = Cushort
 
+const Gdi32 = "gdi32.dll"
+
 # Win32 helpers
 
 
 
-# end # module
