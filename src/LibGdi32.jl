@@ -1,17 +1,17 @@
-module LibGdi32
+# module LibGdi32
 
 using CEnum
 
 # 
 # Automatically generated file - do not edit
 #
-const User32 = "user32.dll"
-const Kernel32 = "kernel32.dll"
+# const User32 = "user32.dll"
+# const Kernel32 = "kernel32.dll"
 const Gdi32 = "Gdi32.dll"
 
-macro L_str(s) Base.cconvert(Cwstring, s) end
+# macro L_str(s) Base.cconvert(Cwstring, s) end
 
-MAKEINTRESOURCEW(i) = LPWSTR(i)
+# MAKEINTRESOURCEW(i) = LPWSTR(i)
 
 
 
@@ -93,4 +93,4 @@ const wchar_t = Cushort
 
 
 
-end # module
+# end # module

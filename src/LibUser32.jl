@@ -1,4 +1,4 @@
-module LibUser32
+# module LibUser32
 
 using CEnum
 
@@ -6,12 +6,12 @@ using CEnum
 # Automatically generated file - do not edit
 #
 const User32 = "user32.dll"
-const Kernel32 = "kernel32.dll"
-const Gdi32 = "Gdi32.dll"
+# const Kernel32 = "kernel32.dll"
+# const Gdi32 = "Gdi32.dll"
 
-macro L_str(s) Base.cconvert(Cwstring, s) end
+# macro L_str(s) Base.cconvert(Cwstring, s) end
 
-MAKEINTRESOURCEW(i) = LPWSTR(i)
+# MAKEINTRESOURCEW(i) = LPWSTR(i)
 
 
 
@@ -676,4 +676,4 @@ const SW_MAX = 11
 
 
 
-end # module
+# end # module
