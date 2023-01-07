@@ -74,6 +74,8 @@ const HGDIOBJ = HANDLE
 
 const HBRUSH = HANDLE
 
+const HFONT = HANDLE
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
@@ -105,6 +107,10 @@ end
 
 function DeleteObject(ho)
     @ccall User32.DeleteObject(ho::HGDIOBJ)::BOOL
+end
+
+function CreateFontIndirectW(lplf)
+    @ccall User32.CreateFontIndirectW(lplf::Ptr{LOGFONTW})::HFONT
 end
 
 const HICON = HANDLE
