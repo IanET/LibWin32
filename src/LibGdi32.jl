@@ -64,6 +64,12 @@ const UINT16 = Cushort
 
 const UINT32 = Cuint
 
+const SIZE_T = ULONG_PTR
+
+const PSIZE_T = Ptr{SIZE_T}
+
+const LPDWORD = Ptr{DWORD}
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG

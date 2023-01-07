@@ -62,6 +62,12 @@ const UINT16 = Cushort
 
 const UINT32 = Cuint
 
+const SIZE_T = ULONG_PTR
+
+const PSIZE_T = Ptr{SIZE_T}
+
+const LPDWORD = Ptr{DWORD}
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
@@ -104,6 +110,22 @@ end
 
 function GetLastError()
     @ccall Kernel32.GetLastError()::DWORD
+end
+
+function GetProcessWorkingSetSize(hProcess, lpMinimumWorkingSetSize, lpMaximumWorkingSetSize)
+    @ccall Kernel32.GetProcessWorkingSetSize(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T)::BOOL
+end
+
+function GetProcessWorkingSetSizeEx(hProcess, lpMinimumWorkingSetSize, lpMaximumWorkingSetSize, Flags)
+    @ccall Kernel32.GetProcessWorkingSetSizeEx(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T, Flags::Cint)::BOOL
+end
+
+function SetProcessWorkingSetSize(hProcess, dwMinimumWorkingSetSize, dwMaximumWorkingSetSize)
+    @ccall Kernel32.SetProcessWorkingSetSize(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T)::BOOL
+end
+
+function SetProcessWorkingSetSizeEx(hProcess, dwMinimumWorkingSetSize, dwMaximumWorkingSetSize, Flags)
+    @ccall Kernel32.SetProcessWorkingSetSizeEx(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T, Flags::DWORD)::BOOL
 end
 
 const WINVER = 0x0603
