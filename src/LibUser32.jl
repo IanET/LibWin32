@@ -1,8 +1,5 @@
 using CEnum
 
-# 
-# Automatically generated file - do not edit
-#
 const User32 = "user32.dll"
 const Kernel32 = "kernel32.dll"
 const Gdi32 = "Gdi32.dll"
@@ -25,6 +22,8 @@ const DWORD_PTR = ULONG_PTR
 const LONG = Clong
 
 const DWORD = Culong
+
+const COLORREF = DWORD
 
 const WCHAR = Cushort
 
@@ -69,15 +68,65 @@ const UINT16 = Cushort
 
 const UINT32 = Cuint
 
+const LPCOLORREF = Ptr{DWORD}
+
+const HGDIOBJ = HANDLE
+
+const HBRUSH = HANDLE
+
+struct tagLOGFONTW
+    lfHeight::LONG
+    lfWidth::LONG
+    lfEscapement::LONG
+    lfOrientation::LONG
+    lfWeight::LONG
+    lfItalic::BYTE
+    lfUnderline::BYTE
+    lfStrikeOut::BYTE
+    lfCharSet::BYTE
+    lfOutPrecision::BYTE
+    lfClipPrecision::BYTE
+    lfQuality::BYTE
+    lfPitchAndFamily::BYTE
+    lfFaceName::NTuple{32, WCHAR}
+end
+
+const LOGFONTW = tagLOGFONTW
+
+const PLOGFONTW = Ptr{tagLOGFONTW}
+
+const NPLOGFONTW = Ptr{tagLOGFONTW}
+
+const LPLOGFONTW = Ptr{tagLOGFONTW}
+
+function CreateSolidBrush(color)
+    @ccall User32.CreateSolidBrush(color::COLORREF)::HBRUSH
+end
+
+function DeleteObject(ho)
+    @ccall User32.DeleteObject(ho::HGDIOBJ)::BOOL
+end
+
 const HICON = HANDLE
 
 const HGLOBAL = HANDLE
 
 const HCURSOR = HANDLE
 
-const HBRUSH = HANDLE
-
 const HMENU = HANDLE
+
+const ATOM = WORD
+
+const LRESULT = LONG_PTR
+
+# typedef LRESULT ( CALLBACK * WNDPROC
+const WNDPROC = Ptr{Cvoid}
+
+const WPARAM = UINT_PTR
+
+const LPVOID = Ptr{Cvoid}
+
+const HDC = HANDLE
 
 struct tagRECT
     left::LONG
@@ -93,6 +142,100 @@ const PRECT = Ptr{tagRECT}
 const NPRECT = Ptr{tagRECT}
 
 const LPRECT = Ptr{tagRECT}
+
+struct tagWNDCLASSW
+    style::UINT
+    lpfnWndProc::WNDPROC
+    cbClsExtra::Cint
+    cbWndExtra::Cint
+    hInstance::HINSTANCE
+    hIcon::HICON
+    hCursor::HCURSOR
+    hbrBackground::HBRUSH
+    lpszMenuName::LPCWSTR
+    lpszClassName::LPCWSTR
+end
+
+const WNDCLASSW = tagWNDCLASSW
+
+const PWNDCLASSW = Ptr{tagWNDCLASSW}
+
+const NPWNDCLASSW = Ptr{tagWNDCLASSW}
+
+const LPWNDCLASSW = Ptr{tagWNDCLASSW}
+
+struct tagPOINT
+    x::LONG
+    y::LONG
+end
+
+const POINT = tagPOINT
+
+const PPOINT = Ptr{tagPOINT}
+
+const NPPOINT = Ptr{tagPOINT}
+
+const LPPOINT = Ptr{tagPOINT}
+
+struct tagMSG
+    hwnd::HWND
+    message::UINT
+    wParam::WPARAM
+    lParam::LPARAM
+    time::DWORD
+    pt::POINT
+    lPrivate::DWORD
+end
+
+const MSG = tagMSG
+
+const PMSG = Ptr{tagMSG}
+
+const NPMSG = Ptr{tagMSG}
+
+const LPMSG = Ptr{tagMSG}
+
+struct tagPAINTSTRUCT
+    hdc::HDC
+    fErase::BOOL
+    rcPaint::RECT
+    fRestore::BOOL
+    fIncUpdate::BOOL
+    rgbReserved::NTuple{32, BYTE}
+end
+
+const PAINTSTRUCT = tagPAINTSTRUCT
+
+const PPAINTSTRUCT = Ptr{tagPAINTSTRUCT}
+
+const NPPAINTSTRUCT = Ptr{tagPAINTSTRUCT}
+
+const LPPAINTSTRUCT = Ptr{tagPAINTSTRUCT}
+
+struct tagNONCLIENTMETRICSW
+    cbSize::UINT
+    iBorderWidth::Cint
+    iScrollWidth::Cint
+    iScrollHeight::Cint
+    iCaptionWidth::Cint
+    iCaptionHeight::Cint
+    lfCaptionFont::LOGFONTW
+    iSmCaptionWidth::Cint
+    iSmCaptionHeight::Cint
+    lfSmCaptionFont::LOGFONTW
+    iMenuWidth::Cint
+    iMenuHeight::Cint
+    lfMenuFont::LOGFONTW
+    lfStatusFont::LOGFONTW
+    lfMessageFont::LOGFONTW
+    iPaddedBorderWidth::Cint
+end
+
+const NONCLIENTMETRICSW = tagNONCLIENTMETRICSW
+
+const PNONCLIENTMETRICSW = Ptr{tagNONCLIENTMETRICSW}
+
+const LPNONCLIENTMETRICSW = Ptr{tagNONCLIENTMETRICSW}
 
 function EnumWindowsProc(hwnd, lParam)
     @ccall User32.EnumWindowsProc(hwnd::HWND, lParam::LPARAM)::BOOL
@@ -126,34 +269,6 @@ function GetWindowLongW(hWnd, nIndex)
     @ccall User32.GetWindowLongW(hWnd::HWND, nIndex::Cint)::LONG
 end
 
-const ATOM = WORD
-
-const LRESULT = LONG_PTR
-
-# typedef LRESULT ( CALLBACK * WNDPROC
-const WNDPROC = Ptr{Cvoid}
-
-struct tagWNDCLASSW
-    style::UINT
-    lpfnWndProc::WNDPROC
-    cbClsExtra::Cint
-    cbWndExtra::Cint
-    hInstance::HINSTANCE
-    hIcon::HICON
-    hCursor::HCURSOR
-    hbrBackground::HBRUSH
-    lpszMenuName::LPCWSTR
-    lpszClassName::LPCWSTR
-end
-
-const WNDCLASSW = tagWNDCLASSW
-
-const PWNDCLASSW = Ptr{tagWNDCLASSW}
-
-const NPWNDCLASSW = Ptr{tagWNDCLASSW}
-
-const LPWNDCLASSW = Ptr{tagWNDCLASSW}
-
 function RegisterClassW(lpWndClass)
     @ccall User32.RegisterClassW(lpWndClass::Ptr{WNDCLASSW})::ATOM
 end
@@ -165,10 +280,6 @@ end
 function LoadCursorW(hInstance, lpCursorName)
     @ccall User32.LoadCursorW(hInstance::HINSTANCE, lpCursorName::LPCWSTR)::HCURSOR
 end
-
-const WPARAM = UINT_PTR
-
-const LPVOID = Ptr{Cvoid}
 
 function CreateWindowExW(dwExStyle, lpClassName, lpWindowName, dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)
     @ccall User32.CreateWindowExW(dwExStyle::DWORD, lpClassName::LPCWSTR, lpWindowName::LPCWSTR, dwStyle::DWORD, X::Cint, Y::Cint, nWidth::Cint, nHeight::Cint, hWndParent::HWND, hMenu::HMENU, hInstance::HINSTANCE, lpParam::LPVOID)::HWND
@@ -186,37 +297,6 @@ function ShowWindow(hWnd, nCmdShow)
     @ccall User32.ShowWindow(hWnd::HWND, nCmdShow::Cint)::BOOL
 end
 
-struct tagPOINT
-    x::LONG
-    y::LONG
-end
-
-const POINT = tagPOINT
-
-const PPOINT = Ptr{tagPOINT}
-
-const NPPOINT = Ptr{tagPOINT}
-
-const LPPOINT = Ptr{tagPOINT}
-
-struct tagMSG
-    hwnd::HWND
-    message::UINT
-    wParam::WPARAM
-    lParam::LPARAM
-    time::DWORD
-    pt::POINT
-    lPrivate::DWORD
-end
-
-const MSG = tagMSG
-
-const PMSG = Ptr{tagMSG}
-
-const NPMSG = Ptr{tagMSG}
-
-const LPMSG = Ptr{tagMSG}
-
 function GetMessageW(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax)
     @ccall User32.GetMessageW(lpMsg::LPMSG, hWnd::HWND, wMsgFilterMin::UINT, wMsgFilterMax::UINT)::BOOL
 end
@@ -228,25 +308,6 @@ end
 function DispatchMessageW(lpMsg)
     @ccall User32.DispatchMessageW(lpMsg::Ptr{MSG})::LRESULT
 end
-
-const HDC = HANDLE
-
-struct tagPAINTSTRUCT
-    hdc::HDC
-    fErase::BOOL
-    rcPaint::RECT
-    fRestore::BOOL
-    fIncUpdate::BOOL
-    rgbReserved::NTuple{32, BYTE}
-end
-
-const PAINTSTRUCT = tagPAINTSTRUCT
-
-const PPAINTSTRUCT = Ptr{tagPAINTSTRUCT}
-
-const NPPAINTSTRUCT = Ptr{tagPAINTSTRUCT}
-
-const LPPAINTSTRUCT = Ptr{tagPAINTSTRUCT}
 
 function BeginPaint(hWnd, lpPaint)
     @ccall User32.BeginPaint(hWnd::HWND, lpPaint::LPPAINTSTRUCT)::HDC
@@ -276,15 +337,21 @@ function SendMessageW(hWnd, Msg, wParam, lParam)
     @ccall User32.SendMessageW(hWnd::HWND, Msg::UINT, wParam::WPARAM, lParam::LPARAM)::LRESULT
 end
 
-const WINVER = 0x0501
+function SystemParametersInfoW(uiAction, uiParam, pvParam, fWinIni)
+    @ccall User32.SystemParametersInfoW(uiAction::UINT, uiParam::UINT, pvParam::PVOID, fWinIni::UINT)::BOOL
+end
 
-const _WIN32_WINNT = 0x0501
+const WINVER = 0x0603
+
+const _WIN32_WINNT = 0x0603
 
 # Skipping MacroDefinition: CALLBACK __attribute__ ( ( stdcall ) )
 
 # Skipping MacroDefinition: WINAPI __attribute__ ( ( stdcall ) )
 
 # Skipping MacroDefinition: WINUSERAPI __attribute__ ( ( stdcall ) )
+
+# Skipping MacroDefinition: WINBASEAPI __attribute__ ( ( stdcall ) )
 
 const wchar_t = Cushort
 
@@ -300,7 +367,11 @@ LOBYTE(w) = BYTE(DWORD_PTR(w) & 0xff)
 
 HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 
+const VOID = Cvoid
+
 const TRUE = 1
+
+const LF_FACESIZE = 32
 
 const GWL_STYLE = -16
 
@@ -418,6 +489,8 @@ const WS_EX_LAYERED = 0x00080000
 
 const WS_EX_NOINHERITLAYOUT = Clong(0x00100000)
 
+const WS_EX_NOREDIRECTIONBITMAP = Clong(0x00200000)
+
 const WS_EX_LAYOUTRTL = Clong(0x00400000)
 
 const WS_EX_COMPOSITED = Clong(0x02000000)
@@ -469,6 +542,8 @@ const IDI_EXCLAMATION = MAKEINTRESOURCE(32515)
 const IDI_ASTERISK = MAKEINTRESOURCE(32516)
 
 const IDI_WINLOGO = MAKEINTRESOURCE(32517)
+
+const IDI_SHIELD = MAKEINTRESOURCE(32518)
 
 const IDI_WARNING = IDI_EXCLAMATION
 
@@ -780,7 +855,481 @@ const MOD_SHIFT = 0x0004
 
 const MOD_WIN = 0x0008
 
-# Win32 helpers
+const MOD_NOREPEAT = 0x4000
 
+const SPI_GETBEEP = 0x0001
 
+const SPI_SETBEEP = 0x0002
+
+const SPI_GETMOUSE = 0x0003
+
+const SPI_SETMOUSE = 0x0004
+
+const SPI_GETBORDER = 0x0005
+
+const SPI_SETBORDER = 0x0006
+
+const SPI_GETKEYBOARDSPEED = 0x000a
+
+const SPI_SETKEYBOARDSPEED = 0x000b
+
+const SPI_LANGDRIVER = 0x000c
+
+const SPI_ICONHORIZONTALSPACING = 0x000d
+
+const SPI_GETSCREENSAVETIMEOUT = 0x000e
+
+const SPI_SETSCREENSAVETIMEOUT = 0x000f
+
+const SPI_GETSCREENSAVEACTIVE = 0x0010
+
+const SPI_SETSCREENSAVEACTIVE = 0x0011
+
+const SPI_GETGRIDGRANULARITY = 0x0012
+
+const SPI_SETGRIDGRANULARITY = 0x0013
+
+const SPI_SETDESKWALLPAPER = 0x0014
+
+const SPI_SETDESKPATTERN = 0x0015
+
+const SPI_GETKEYBOARDDELAY = 0x0016
+
+const SPI_SETKEYBOARDDELAY = 0x0017
+
+const SPI_ICONVERTICALSPACING = 0x0018
+
+const SPI_GETICONTITLEWRAP = 0x0019
+
+const SPI_SETICONTITLEWRAP = 0x001a
+
+const SPI_GETMENUDROPALIGNMENT = 0x001b
+
+const SPI_SETMENUDROPALIGNMENT = 0x001c
+
+const SPI_SETDOUBLECLKWIDTH = 0x001d
+
+const SPI_SETDOUBLECLKHEIGHT = 0x001e
+
+const SPI_GETICONTITLELOGFONT = 0x001f
+
+const SPI_SETDOUBLECLICKTIME = 0x0020
+
+const SPI_SETMOUSEBUTTONSWAP = 0x0021
+
+const SPI_SETICONTITLELOGFONT = 0x0022
+
+const SPI_GETFASTTASKSWITCH = 0x0023
+
+const SPI_SETFASTTASKSWITCH = 0x0024
+
+const SPI_SETDRAGFULLWINDOWS = 0x0025
+
+const SPI_GETDRAGFULLWINDOWS = 0x0026
+
+const SPI_GETNONCLIENTMETRICS = 0x0029
+
+const SPI_SETNONCLIENTMETRICS = 0x002a
+
+const SPI_GETMINIMIZEDMETRICS = 0x002b
+
+const SPI_SETMINIMIZEDMETRICS = 0x002c
+
+const SPI_GETICONMETRICS = 0x002d
+
+const SPI_SETICONMETRICS = 0x002e
+
+const SPI_SETWORKAREA = 0x002f
+
+const SPI_GETWORKAREA = 0x0030
+
+const SPI_SETPENWINDOWS = 0x0031
+
+const SPI_GETHIGHCONTRAST = 0x0042
+
+const SPI_SETHIGHCONTRAST = 0x0043
+
+const SPI_GETKEYBOARDPREF = 0x0044
+
+const SPI_SETKEYBOARDPREF = 0x0045
+
+const SPI_GETSCREENREADER = 0x0046
+
+const SPI_SETSCREENREADER = 0x0047
+
+const SPI_GETANIMATION = 0x0048
+
+const SPI_SETANIMATION = 0x0049
+
+const SPI_GETFONTSMOOTHING = 0x004a
+
+const SPI_SETFONTSMOOTHING = 0x004b
+
+const SPI_SETDRAGWIDTH = 0x004c
+
+const SPI_SETDRAGHEIGHT = 0x004d
+
+const SPI_SETHANDHELD = 0x004e
+
+const SPI_GETLOWPOWERTIMEOUT = 0x004f
+
+const SPI_GETPOWEROFFTIMEOUT = 0x0050
+
+const SPI_SETLOWPOWERTIMEOUT = 0x0051
+
+const SPI_SETPOWEROFFTIMEOUT = 0x0052
+
+const SPI_GETLOWPOWERACTIVE = 0x0053
+
+const SPI_GETPOWEROFFACTIVE = 0x0054
+
+const SPI_SETLOWPOWERACTIVE = 0x0055
+
+const SPI_SETPOWEROFFACTIVE = 0x0056
+
+const SPI_SETCURSORS = 0x0057
+
+const SPI_SETICONS = 0x0058
+
+const SPI_GETDEFAULTINPUTLANG = 0x0059
+
+const SPI_SETDEFAULTINPUTLANG = 0x005a
+
+const SPI_SETLANGTOGGLE = 0x005b
+
+const SPI_GETWINDOWSEXTENSION = 0x005c
+
+const SPI_SETMOUSETRAILS = 0x005d
+
+const SPI_GETMOUSETRAILS = 0x005e
+
+const SPI_SETSCREENSAVERRUNNING = 0x0061
+
+const SPI_SCREENSAVERRUNNING = SPI_SETSCREENSAVERRUNNING
+
+const SPI_GETFILTERKEYS = 0x0032
+
+const SPI_SETFILTERKEYS = 0x0033
+
+const SPI_GETTOGGLEKEYS = 0x0034
+
+const SPI_SETTOGGLEKEYS = 0x0035
+
+const SPI_GETMOUSEKEYS = 0x0036
+
+const SPI_SETMOUSEKEYS = 0x0037
+
+const SPI_GETSHOWSOUNDS = 0x0038
+
+const SPI_SETSHOWSOUNDS = 0x0039
+
+const SPI_GETSTICKYKEYS = 0x003a
+
+const SPI_SETSTICKYKEYS = 0x003b
+
+const SPI_GETACCESSTIMEOUT = 0x003c
+
+const SPI_SETACCESSTIMEOUT = 0x003d
+
+const SPI_GETSERIALKEYS = 0x003e
+
+const SPI_SETSERIALKEYS = 0x003f
+
+const SPI_GETSOUNDSENTRY = 0x0040
+
+const SPI_SETSOUNDSENTRY = 0x0041
+
+const SPI_GETSNAPTODEFBUTTON = 0x005f
+
+const SPI_SETSNAPTODEFBUTTON = 0x0060
+
+const SPI_GETMOUSEHOVERWIDTH = 0x0062
+
+const SPI_SETMOUSEHOVERWIDTH = 0x0063
+
+const SPI_GETMOUSEHOVERHEIGHT = 0x0064
+
+const SPI_SETMOUSEHOVERHEIGHT = 0x0065
+
+const SPI_GETMOUSEHOVERTIME = 0x0066
+
+const SPI_SETMOUSEHOVERTIME = 0x0067
+
+const SPI_GETWHEELSCROLLLINES = 0x0068
+
+const SPI_SETWHEELSCROLLLINES = 0x0069
+
+const SPI_GETMENUSHOWDELAY = 0x006a
+
+const SPI_SETMENUSHOWDELAY = 0x006b
+
+const SPI_GETWHEELSCROLLCHARS = 0x006c
+
+const SPI_SETWHEELSCROLLCHARS = 0x006d
+
+const SPI_GETSHOWIMEUI = 0x006e
+
+const SPI_SETSHOWIMEUI = 0x006f
+
+const SPI_GETMOUSESPEED = 0x0070
+
+const SPI_SETMOUSESPEED = 0x0071
+
+const SPI_GETSCREENSAVERRUNNING = 0x0072
+
+const SPI_GETDESKWALLPAPER = 0x0073
+
+const SPI_GETAUDIODESCRIPTION = 0x0074
+
+const SPI_SETAUDIODESCRIPTION = 0x0075
+
+const SPI_GETSCREENSAVESECURE = 0x0076
+
+const SPI_SETSCREENSAVESECURE = 0x0077
+
+const SPI_GETHUNGAPPTIMEOUT = 0x0078
+
+const SPI_SETHUNGAPPTIMEOUT = 0x0079
+
+const SPI_GETWAITTOKILLTIMEOUT = 0x007a
+
+const SPI_SETWAITTOKILLTIMEOUT = 0x007b
+
+const SPI_GETWAITTOKILLSERVICETIMEOUT = 0x007c
+
+const SPI_SETWAITTOKILLSERVICETIMEOUT = 0x007d
+
+const SPI_GETMOUSEDOCKTHRESHOLD = 0x007e
+
+const SPI_SETMOUSEDOCKTHRESHOLD = 0x007f
+
+const SPI_GETPENDOCKTHRESHOLD = 0x0080
+
+const SPI_SETPENDOCKTHRESHOLD = 0x0081
+
+const SPI_GETWINARRANGING = 0x0082
+
+const SPI_SETWINARRANGING = 0x0083
+
+const SPI_GETMOUSEDRAGOUTTHRESHOLD = 0x0084
+
+const SPI_SETMOUSEDRAGOUTTHRESHOLD = 0x0085
+
+const SPI_GETPENDRAGOUTTHRESHOLD = 0x0086
+
+const SPI_SETPENDRAGOUTTHRESHOLD = 0x0087
+
+const SPI_GETMOUSESIDEMOVETHRESHOLD = 0x0088
+
+const SPI_SETMOUSESIDEMOVETHRESHOLD = 0x0089
+
+const SPI_GETPENSIDEMOVETHRESHOLD = 0x008a
+
+const SPI_SETPENSIDEMOVETHRESHOLD = 0x008b
+
+const SPI_GETDRAGFROMMAXIMIZE = 0x008c
+
+const SPI_SETDRAGFROMMAXIMIZE = 0x008d
+
+const SPI_GETSNAPSIZING = 0x008e
+
+const SPI_SETSNAPSIZING = 0x008f
+
+const SPI_GETDOCKMOVING = 0x0090
+
+const SPI_SETDOCKMOVING = 0x0091
+
+const SPI_GETTOUCHPREDICTIONPARAMETERS = 0x009c
+
+const SPI_SETTOUCHPREDICTIONPARAMETERS = 0x009d
+
+const SPI_GETLOGICALDPIOVERRIDE = 0x009e
+
+const SPI_SETLOGICALDPIOVERRIDE = 0x009f
+
+const SPI_GETMENURECT = 0x00a2
+
+const SPI_SETMENURECT = 0x00a3
+
+const SPI_GETACTIVEWINDOWTRACKING = 0x1000
+
+const SPI_SETACTIVEWINDOWTRACKING = 0x1001
+
+const SPI_GETMENUANIMATION = 0x1002
+
+const SPI_SETMENUANIMATION = 0x1003
+
+const SPI_GETCOMBOBOXANIMATION = 0x1004
+
+const SPI_SETCOMBOBOXANIMATION = 0x1005
+
+const SPI_GETLISTBOXSMOOTHSCROLLING = 0x1006
+
+const SPI_SETLISTBOXSMOOTHSCROLLING = 0x1007
+
+const SPI_GETGRADIENTCAPTIONS = 0x1008
+
+const SPI_SETGRADIENTCAPTIONS = 0x1009
+
+const SPI_GETKEYBOARDCUES = 0x100a
+
+const SPI_SETKEYBOARDCUES = 0x100b
+
+const SPI_GETMENUUNDERLINES = SPI_GETKEYBOARDCUES
+
+const SPI_SETMENUUNDERLINES = SPI_SETKEYBOARDCUES
+
+const SPI_GETACTIVEWNDTRKZORDER = 0x100c
+
+const SPI_SETACTIVEWNDTRKZORDER = 0x100d
+
+const SPI_GETHOTTRACKING = 0x100e
+
+const SPI_SETHOTTRACKING = 0x100f
+
+const SPI_GETMENUFADE = 0x1012
+
+const SPI_SETMENUFADE = 0x1013
+
+const SPI_GETSELECTIONFADE = 0x1014
+
+const SPI_SETSELECTIONFADE = 0x1015
+
+const SPI_GETTOOLTIPANIMATION = 0x1016
+
+const SPI_SETTOOLTIPANIMATION = 0x1017
+
+const SPI_GETTOOLTIPFADE = 0x1018
+
+const SPI_SETTOOLTIPFADE = 0x1019
+
+const SPI_GETCURSORSHADOW = 0x101a
+
+const SPI_SETCURSORSHADOW = 0x101b
+
+const SPI_GETMOUSESONAR = 0x101c
+
+const SPI_SETMOUSESONAR = 0x101d
+
+const SPI_GETMOUSECLICKLOCK = 0x101e
+
+const SPI_SETMOUSECLICKLOCK = 0x101f
+
+const SPI_GETMOUSEVANISH = 0x1020
+
+const SPI_SETMOUSEVANISH = 0x1021
+
+const SPI_GETFLATMENU = 0x1022
+
+const SPI_SETFLATMENU = 0x1023
+
+const SPI_GETDROPSHADOW = 0x1024
+
+const SPI_SETDROPSHADOW = 0x1025
+
+const SPI_GETBLOCKSENDINPUTRESETS = 0x1026
+
+const SPI_SETBLOCKSENDINPUTRESETS = 0x1027
+
+const SPI_GETUIEFFECTS = 0x103e
+
+const SPI_SETUIEFFECTS = 0x103f
+
+const SPI_GETDISABLEOVERLAPPEDCONTENT = 0x1040
+
+const SPI_SETDISABLEOVERLAPPEDCONTENT = 0x1041
+
+const SPI_GETCLIENTAREAANIMATION = 0x1042
+
+const SPI_SETCLIENTAREAANIMATION = 0x1043
+
+const SPI_GETCLEARTYPE = 0x1048
+
+const SPI_SETCLEARTYPE = 0x1049
+
+const SPI_GETSPEECHRECOGNITION = 0x104a
+
+const SPI_SETSPEECHRECOGNITION = 0x104b
+
+const SPI_GETCARETBROWSING = 0x104c
+
+const SPI_SETCARETBROWSING = 0x104d
+
+const SPI_GETTHREADLOCALINPUTSETTINGS = 0x104e
+
+const SPI_SETTHREADLOCALINPUTSETTINGS = 0x104f
+
+const SPI_GETSYSTEMLANGUAGEBAR = 0x1050
+
+const SPI_SETSYSTEMLANGUAGEBAR = 0x1051
+
+const SPI_GETFOREGROUNDLOCKTIMEOUT = 0x2000
+
+const SPI_SETFOREGROUNDLOCKTIMEOUT = 0x2001
+
+const SPI_GETACTIVEWNDTRKTIMEOUT = 0x2002
+
+const SPI_SETACTIVEWNDTRKTIMEOUT = 0x2003
+
+const SPI_GETFOREGROUNDFLASHCOUNT = 0x2004
+
+const SPI_SETFOREGROUNDFLASHCOUNT = 0x2005
+
+const SPI_GETCARETWIDTH = 0x2006
+
+const SPI_SETCARETWIDTH = 0x2007
+
+const SPI_GETMOUSECLICKLOCKTIME = 0x2008
+
+const SPI_SETMOUSECLICKLOCKTIME = 0x2009
+
+const SPI_GETFONTSMOOTHINGTYPE = 0x200a
+
+const SPI_SETFONTSMOOTHINGTYPE = 0x200b
+
+const SPI_GETFONTSMOOTHINGCONTRAST = 0x200c
+
+const SPI_SETFONTSMOOTHINGCONTRAST = 0x200d
+
+const SPI_GETFOCUSBORDERWIDTH = 0x200e
+
+const SPI_SETFOCUSBORDERWIDTH = 0x200f
+
+const SPI_GETFOCUSBORDERHEIGHT = 0x2010
+
+const SPI_SETFOCUSBORDERHEIGHT = 0x2011
+
+const SPI_GETFONTSMOOTHINGORIENTATION = 0x2012
+
+const SPI_SETFONTSMOOTHINGORIENTATION = 0x2013
+
+const SPI_GETMINIMUMHITRADIUS = 0x2014
+
+const SPI_SETMINIMUMHITRADIUS = 0x2015
+
+const SPI_GETMESSAGEDURATION = 0x2016
+
+const SPI_SETMESSAGEDURATION = 0x2017
+
+const SPI_GETCONTACTVISUALIZATION = 0x2018
+
+const SPI_SETCONTACTVISUALIZATION = 0x2019
+
+const SPI_GETGESTUREVISUALIZATION = 0x201a
+
+const SPI_SETGESTUREVISUALIZATION = 0x201b
+
+const SPI_GETMOUSEWHEELROUTING = 0x201c
+
+const SPI_SETMOUSEWHEELROUTING = 0x201d
+
+const SPI_GETCARETTIMEOUT = 0x2022
+
+const SPI_SETCARETTIMEOUT = 0x2023
+
+const SPI_GETHANDEDNESS = 0x2024
+
+const SPI_SETHANDEDNESS = 0x2025
+
+nothing
 

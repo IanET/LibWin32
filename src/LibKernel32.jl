@@ -1,8 +1,5 @@
 using CEnum
 
-# 
-# Automatically generated file - do not edit
-#
 const User32 = "user32.dll"
 const Kernel32 = "kernel32.dll"
 const Gdi32 = "Gdi32.dll"
@@ -82,15 +79,21 @@ function GetModuleHandleW(lpModuleName)
     @ccall Kernel32.GetModuleHandleW(lpModuleName::LPCWSTR)::HMODULE
 end
 
-const WINVER = 0x0501
+function GetLastError()
+    @ccall Kernel32.GetLastError()::DWORD
+end
 
-const _WIN32_WINNT = 0x0501
+const WINVER = 0x0603
+
+const _WIN32_WINNT = 0x0603
 
 # Skipping MacroDefinition: CALLBACK __attribute__ ( ( stdcall ) )
 
 # Skipping MacroDefinition: WINAPI __attribute__ ( ( stdcall ) )
 
 # Skipping MacroDefinition: WINUSERAPI __attribute__ ( ( stdcall ) )
+
+# Skipping MacroDefinition: WINBASEAPI __attribute__ ( ( stdcall ) )
 
 const wchar_t = Cushort
 
@@ -106,9 +109,9 @@ LOBYTE(w) = BYTE(DWORD_PTR(w) & 0xff)
 
 HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 
+const VOID = Cvoid
+
 const TRUE = 1
 
-# Win32 helpers
-
-
+nothing
 
