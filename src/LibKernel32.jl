@@ -68,6 +68,8 @@ const PSIZE_T = Ptr{SIZE_T}
 
 const LPDWORD = Ptr{DWORD}
 
+const PDWORD = Ptr{DWORD}
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
@@ -117,7 +119,7 @@ function GetProcessWorkingSetSize(hProcess, lpMinimumWorkingSetSize, lpMaximumWo
 end
 
 function GetProcessWorkingSetSizeEx(hProcess, lpMinimumWorkingSetSize, lpMaximumWorkingSetSize, Flags)
-    @ccall Kernel32.GetProcessWorkingSetSizeEx(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T, Flags::Cint)::BOOL
+    @ccall Kernel32.GetProcessWorkingSetSizeEx(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T, Flags::PDWORD)::BOOL
 end
 
 function SetProcessWorkingSetSize(hProcess, dwMinimumWorkingSetSize, dwMaximumWorkingSetSize)
@@ -126,6 +128,26 @@ end
 
 function SetProcessWorkingSetSizeEx(hProcess, dwMinimumWorkingSetSize, dwMaximumWorkingSetSize, Flags)
     @ccall Kernel32.SetProcessWorkingSetSizeEx(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T, Flags::DWORD)::BOOL
+end
+
+function GetCurrentProcess()
+    @ccall Kernel32.GetCurrentProcess()::HANDLE
+end
+
+function GetCurrentProcessId()
+    @ccall Kernel32.GetCurrentProcessId()::DWORD
+end
+
+function ExitProcess(uExitCode)
+    @ccall Kernel32.ExitProcess(uExitCode::UINT)::Cvoid
+end
+
+function TerminateProcess(hProcess, uExitCode)
+    @ccall Kernel32.TerminateProcess(hProcess::HANDLE, uExitCode::UINT)::BOOL
+end
+
+function GetExitCodeProcess(hProcess, lpExitCode)
+    @ccall Kernel32.GetExitCodeProcess(hProcess::HANDLE, lpExitCode::LPDWORD)::BOOL
 end
 
 const WINVER = 0x0603
@@ -139,6 +161,8 @@ const _WIN32_WINNT = 0x0603
 # Skipping MacroDefinition: WINUSERAPI __attribute__ ( ( stdcall ) )
 
 # Skipping MacroDefinition: WINBASEAPI __attribute__ ( ( stdcall ) )
+
+# Skipping MacroDefinition: DECLSPEC_NORETURN __attribute__ ( ( noreturn ) )
 
 const wchar_t = Cushort
 

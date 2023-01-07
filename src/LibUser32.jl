@@ -70,6 +70,8 @@ const PSIZE_T = Ptr{SIZE_T}
 
 const LPDWORD = Ptr{DWORD}
 
+const PDWORD = Ptr{DWORD}
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
@@ -342,6 +344,8 @@ const _WIN32_WINNT = 0x0603
 # Skipping MacroDefinition: WINUSERAPI __attribute__ ( ( stdcall ) )
 
 # Skipping MacroDefinition: WINBASEAPI __attribute__ ( ( stdcall ) )
+
+# Skipping MacroDefinition: DECLSPEC_NORETURN __attribute__ ( ( noreturn ) )
 
 const wchar_t = Cushort
 
