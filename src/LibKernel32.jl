@@ -106,6 +106,8 @@ LOBYTE(w) = BYTE(DWORD_PTR(w) & 0xff)
 
 HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 
+const TRUE = 1
+
 # Win32 helpers
 
 

@@ -300,6 +300,8 @@ LOBYTE(w) = BYTE(DWORD_PTR(w) & 0xff)
 
 HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 
+const TRUE = 1
+
 const GWL_STYLE = -16
 
 const GWL_EXSTYLE = -20
@@ -702,6 +704,44 @@ const WM_NCMBUTTONUP = 0x00a8
 
 const WM_NCMBUTTONDBLCLK = 0x00a9
 
+const WM_CUT = 0x0300
+
+const WM_COPY = 0x0301
+
+const WM_PASTE = 0x0302
+
+const WM_CLEAR = 0x0303
+
+const WM_UNDO = 0x0304
+
+const WM_RENDERFORMAT = 0x0305
+
+const WM_RENDERALLFORMATS = 0x0306
+
+const WM_DESTROYCLIPBOARD = 0x0307
+
+const WM_DRAWCLIPBOARD = 0x0308
+
+const WM_PAINTCLIPBOARD = 0x0309
+
+const WM_VSCROLLCLIPBOARD = 0x030a
+
+const WM_SIZECLIPBOARD = 0x030b
+
+const WM_ASKCBFORMATNAME = 0x030c
+
+const WM_CHANGECBCHAIN = 0x030d
+
+const WM_HSCROLLCLIPBOARD = 0x030e
+
+const WM_QUERYNEWPALETTE = 0x030f
+
+const WM_PALETTEISCHANGING = 0x0310
+
+const WM_PALETTECHANGED = 0x0311
+
+const WM_HOTKEY = 0x0312
+
 const SW_HIDE = 0
 
 const SW_SHOWNORMAL = 1
@@ -731,6 +771,14 @@ const SW_SHOWDEFAULT = 10
 const SW_FORCEMINIMIZE = 11
 
 const SW_MAX = 11
+
+const MOD_ALT = 0x0001
+
+const MOD_CONTROL = 0x0002
+
+const MOD_SHIFT = 0x0004
+
+const MOD_WIN = 0x0008
 
 # Win32 helpers
 
