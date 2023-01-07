@@ -1,14 +1,12 @@
 using CEnum
 
-const User32 = "user32.dll"
 const Kernel32 = "kernel32.dll"
-const Gdi32 = "Gdi32.dll"
+const Gdi32 = "gdi32.dll"
+const User32 = "user32.dll"
 
 macro L_str(s) Base.cconvert(Cwstring, s) end
 
 MAKEINTRESOURCEW(i) = LPWSTR(i)
-
-
 
 
 const BYTE = Cuchar
@@ -66,14 +64,6 @@ const UINT16 = Cushort
 
 const UINT32 = Cuint
 
-const LPCOLORREF = Ptr{DWORD}
-
-const HGDIOBJ = HANDLE
-
-const HBRUSH = HANDLE
-
-const HFONT = HANDLE
-
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
@@ -98,6 +88,14 @@ const PLOGFONTW = Ptr{tagLOGFONTW}
 const NPLOGFONTW = Ptr{tagLOGFONTW}
 
 const LPLOGFONTW = Ptr{tagLOGFONTW}
+
+const LPCOLORREF = Ptr{DWORD}
+
+const HGDIOBJ = HANDLE
+
+const HBRUSH = HANDLE
+
+const HFONT = HANDLE
 
 function CreateSolidBrush(color)
     @ccall Gdi32.CreateSolidBrush(color::COLORREF)::HBRUSH

@@ -1,14 +1,12 @@
 using CEnum
 
-const User32 = "user32.dll"
 const Kernel32 = "kernel32.dll"
-const Gdi32 = "Gdi32.dll"
+const Gdi32 = "gdi32.dll"
+const User32 = "user32.dll"
 
 macro L_str(s) Base.cconvert(Cwstring, s) end
 
 MAKEINTRESOURCEW(i) = LPWSTR(i)
-
-
 
 
 const BYTE = Cuchar
@@ -64,6 +62,31 @@ const UINT16 = Cushort
 
 const UINT32 = Cuint
 
+struct tagLOGFONTW
+    lfHeight::LONG
+    lfWidth::LONG
+    lfEscapement::LONG
+    lfOrientation::LONG
+    lfWeight::LONG
+    lfItalic::BYTE
+    lfUnderline::BYTE
+    lfStrikeOut::BYTE
+    lfCharSet::BYTE
+    lfOutPrecision::BYTE
+    lfClipPrecision::BYTE
+    lfQuality::BYTE
+    lfPitchAndFamily::BYTE
+    lfFaceName::NTuple{32, WCHAR}
+end
+
+const LOGFONTW = tagLOGFONTW
+
+const PLOGFONTW = Ptr{tagLOGFONTW}
+
+const NPLOGFONTW = Ptr{tagLOGFONTW}
+
+const LPLOGFONTW = Ptr{tagLOGFONTW}
+
 # typedef INT_PTR ( FAR WINAPI * FARPROC
 const FARPROC = Ptr{Cvoid}
 
@@ -112,6 +135,8 @@ HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 const VOID = Cvoid
 
 const TRUE = 1
+
+const LF_FACESIZE = 32
 
 nothing
 
