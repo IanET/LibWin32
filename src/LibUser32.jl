@@ -1,14 +1,34 @@
 using CEnum
 
+# 
+# Automatically generated file - do not edit
+#
+const User32 = "user32.dll"
+const Kernel32 = "kernel32.dll"
+const Gdi32 = "Gdi32.dll"
+
+macro L_str(s) Base.cconvert(Cwstring, s) end
+
+MAKEINTRESOURCEW(i) = LPWSTR(i)
+
+
 
 
 const WORD = Cushort
 
+const BYTE = Cuchar
+
+const ULONG_PTR = Culonglong
+
+const DWORD_PTR = ULONG_PTR
+
+const LONG = Clong
+
+const DWORD = Culong
+
 const WCHAR = Cushort
 
 const LPWSTR = Ptr{WCHAR}
-
-const DWORD = Culong
 
 const LONG_PTR = Clonglong
 
@@ -32,8 +52,6 @@ const HMODULE = HINSTANCE
 const LPCWSTR = Ptr{WCHAR}
 
 const LPCTSTR = LPCWSTR
-
-const LONG = Clong
 
 const CHAR = Cchar
 
@@ -213,8 +231,6 @@ end
 
 const HDC = HANDLE
 
-const BYTE = Cuchar
-
 struct tagPAINTSTRUCT
     hdc::HDC
     fErase::BOOL
@@ -244,6 +260,22 @@ function FillRect(hDC, lprc, hbr)
     @ccall User32.FillRect(hDC::HDC, lprc::Ptr{RECT}, hbr::HBRUSH)::Cint
 end
 
+function MoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint)
+    @ccall User32.MoveWindow(hWnd::HWND, X::Cint, Y::Cint, nWidth::Cint, nHeight::Cint, bRepaint::BOOL)::BOOL
+end
+
+function RegisterHotKey(hWnd, id, fsModifiers, vk)
+    @ccall User32.RegisterHotKey(hWnd::HWND, id::Cint, fsModifiers::UINT, vk::UINT)::BOOL
+end
+
+function GetWindowLongPtrW(hWnd, nIndex)
+    @ccall User32.GetWindowLongPtrW(hWnd::HWND, nIndex::Cint)::LONG_PTR
+end
+
+function SendMessageW(hWnd, Msg, wParam, lParam)
+    @ccall User32.SendMessageW(hWnd::HWND, Msg::UINT, wParam::WPARAM, lParam::LPARAM)::LRESULT
+end
+
 const WINVER = 0x0501
 
 const _WIN32_WINNT = 0x0501
@@ -252,9 +284,21 @@ const _WIN32_WINNT = 0x0501
 
 # Skipping MacroDefinition: WINAPI __attribute__ ( ( stdcall ) )
 
+# Skipping MacroDefinition: WINUSERAPI __attribute__ ( ( stdcall ) )
+
 const wchar_t = Cushort
 
-const User32 = "user32.dll"
+MAKEWORD(a, b) = WORD(BYTE(DWORD_PTR(a) & 0xff) | WORD(BYTE(DWORD_PTR(b) & 0xff)) << 8)
+
+MAKELONG(a, b) = LONG(WORD(DWORD_PTR(a) & 0xffff) | DWORD(WORD(DWORD_PTR(b) & 0xffff)) << 16)
+
+LOWORD(l) = WORD(DWORD_PTR(l) & 0xffff)
+
+HIWORD(l) = WORD(DWORD_PTR(l) >> 16 & 0xffff)
+
+LOBYTE(w) = BYTE(DWORD_PTR(w) & 0xff)
+
+HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 
 const GWL_STYLE = -16
 
@@ -429,6 +473,34 @@ const IDI_WARNING = IDI_EXCLAMATION
 const IDI_ERROR = IDI_HAND
 
 const IDI_INFORMATION = IDI_ASTERISK
+
+const ES_LEFT = Clong(0x0000)
+
+const ES_CENTER = Clong(0x0001)
+
+const ES_RIGHT = Clong(0x0002)
+
+const ES_MULTILINE = Clong(0x0004)
+
+const ES_UPPERCASE = Clong(0x0008)
+
+const ES_LOWERCASE = Clong(0x0010)
+
+const ES_PASSWORD = Clong(0x0020)
+
+const ES_AUTOVSCROLL = Clong(0x0040)
+
+const ES_AUTOHSCROLL = Clong(0x0080)
+
+const ES_NOHIDESEL = Clong(0x0100)
+
+const ES_OEMCONVERT = Clong(0x0400)
+
+const ES_READONLY = Clong(0x0800)
+
+const ES_WANTRETURN = Clong(0x1000)
+
+const ES_NUMBER = Clong(0x2000)
 
 const CS_BYTEALIGNCLIENT = 0x1000
 

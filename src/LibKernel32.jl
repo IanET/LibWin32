@@ -1,6 +1,26 @@
 using CEnum
 
+# 
+# Automatically generated file - do not edit
+#
+const User32 = "user32.dll"
+const Kernel32 = "kernel32.dll"
+const Gdi32 = "Gdi32.dll"
 
+macro L_str(s) Base.cconvert(Cwstring, s) end
+
+MAKEINTRESOURCEW(i) = LPWSTR(i)
+
+
+
+
+const BYTE = Cuchar
+
+const ULONG_PTR = Culonglong
+
+const DWORD_PTR = ULONG_PTR
+
+const LONG = Clong
 
 const DWORD = Culong
 
@@ -28,8 +48,6 @@ const WCHAR = Cushort
 const LPCWSTR = Ptr{WCHAR}
 
 const LPCTSTR = LPCWSTR
-
-const LONG = Clong
 
 const LPWSTR = Ptr{WCHAR}
 
@@ -72,9 +90,21 @@ const _WIN32_WINNT = 0x0501
 
 # Skipping MacroDefinition: WINAPI __attribute__ ( ( stdcall ) )
 
+# Skipping MacroDefinition: WINUSERAPI __attribute__ ( ( stdcall ) )
+
 const wchar_t = Cushort
 
-const Kernel32 = "kernel32.dll"
+MAKEWORD(a, b) = WORD(BYTE(DWORD_PTR(a) & 0xff) | WORD(BYTE(DWORD_PTR(b) & 0xff)) << 8)
+
+MAKELONG(a, b) = LONG(WORD(DWORD_PTR(a) & 0xffff) | DWORD(WORD(DWORD_PTR(b) & 0xffff)) << 16)
+
+LOWORD(l) = WORD(DWORD_PTR(l) & 0xffff)
+
+HIWORD(l) = WORD(DWORD_PTR(l) >> 16 & 0xffff)
+
+LOBYTE(w) = BYTE(DWORD_PTR(w) & 0xff)
+
+HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 
 # Win32 helpers
 
