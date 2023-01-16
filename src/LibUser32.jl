@@ -333,6 +333,14 @@ function SystemParametersInfoW(uiAction, uiParam, pvParam, fWinIni)
     @ccall User32.SystemParametersInfoW(uiAction::UINT, uiParam::UINT, pvParam::PVOID, fWinIni::UINT)::BOOL
 end
 
+function SetCursor(hCursor)
+    @ccall User32.SetCursor(hCursor::HCURSOR)::HCURSOR
+end
+
+function GetCursorPos(lpPoint)
+    @ccall User32.GetCursorPos(lpPoint::LPPOINT)::BOOL
+end
+
 const WINVER = 0x0603
 
 const _WIN32_WINNT = 0x0603
