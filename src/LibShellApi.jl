@@ -127,24 +127,24 @@ const LARGE_INTEGER = _LARGE_INTEGER
 
 const PLARGE_INTEGER = Ptr{LARGE_INTEGER}
 
-struct var"##Ctag#294"
+struct var"##Ctag#298"
     data::NTuple{8, UInt8}
 end
 
-function Base.getproperty(x::Ptr{var"##Ctag#294"}, f::Symbol)
-    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#295"}(x + 0)
+function Base.getproperty(x::Ptr{var"##Ctag#298"}, f::Symbol)
+    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#299"}(x + 0)
     f === :Pointer && return Ptr{PVOID}(x + 0)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::var"##Ctag#294", f::Symbol)
-    r = Ref{var"##Ctag#294"}(x)
-    ptr = Base.unsafe_convert(Ptr{var"##Ctag#294"}, r)
+function Base.getproperty(x::var"##Ctag#298", f::Symbol)
+    r = Ref{var"##Ctag#298"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#298"}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{var"##Ctag#294"}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{var"##Ctag#298"}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
 end
 
@@ -155,7 +155,7 @@ end
 function Base.getproperty(x::Ptr{_OVERLAPPED}, f::Symbol)
     f === :Internal && return Ptr{ULONG_PTR}(x + 0)
     f === :InternalHigh && return Ptr{ULONG_PTR}(x + 8)
-    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#294"}(x + 16)
+    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#298"}(x + 16)
     f === :hEvent && return Ptr{HANDLE}(x + 24)
     return getfield(x, f)
 end
@@ -175,115 +175,96 @@ const OVERLAPPED = _OVERLAPPED
 
 const LPOVERLAPPED = Ptr{_OVERLAPPED}
 
-# typedef INT_PTR ( FAR WINAPI * FARPROC
-const FARPROC = Ptr{Cvoid}
-
-function CreateFileMappingW(hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName)
-    @ccall Kernel32.CreateFileMappingW(hFile::HANDLE, lpFileMappingAttributes::LPSECURITY_ATTRIBUTES, flProtect::DWORD, dwMaximumSizeHigh::DWORD, dwMaximumSizeLow::DWORD, lpName::LPCWSTR)::HANDLE
+struct _GUID
+    Data1::Culong
+    Data2::Cushort
+    Data3::Cushort
+    Data4::NTuple{8, Cuchar}
 end
 
-function OpenFileMappingW(dwDesiredAccess, bInheritHandle, lpName)
-    @ccall Kernel32.OpenFileMappingW(dwDesiredAccess::DWORD, bInheritHandle::BOOL, lpName::LPCWSTR)::HANDLE
+const GUID = _GUID
+
+struct var"##Ctag#300"
+    data::NTuple{4, UInt8}
 end
 
-function MapViewOfFile(hFileMappingObject, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap)
-    @ccall Kernel32.MapViewOfFile(hFileMappingObject::HANDLE, dwDesiredAccess::DWORD, dwFileOffsetHigh::DWORD, dwFileOffsetLow::DWORD, dwNumberOfBytesToMap::SIZE_T)::LPVOID
+function Base.getproperty(x::Ptr{var"##Ctag#300"}, f::Symbol)
+    f === :uTimeout && return Ptr{UINT}(x + 0)
+    f === :uVersion && return Ptr{UINT}(x + 0)
+    return getfield(x, f)
 end
 
-function GetProcessWorkingSetSize(hProcess, lpMinimumWorkingSetSize, lpMaximumWorkingSetSize)
-    @ccall Kernel32.GetProcessWorkingSetSize(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T)::BOOL
+function Base.getproperty(x::var"##Ctag#300", f::Symbol)
+    r = Ref{var"##Ctag#300"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#300"}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
 end
 
-function GetProcessWorkingSetSizeEx(hProcess, lpMinimumWorkingSetSize, lpMaximumWorkingSetSize, Flags)
-    @ccall Kernel32.GetProcessWorkingSetSizeEx(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T, Flags::PDWORD)::BOOL
+function Base.setproperty!(x::Ptr{var"##Ctag#300"}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
-function SetProcessWorkingSetSize(hProcess, dwMinimumWorkingSetSize, dwMaximumWorkingSetSize)
-    @ccall Kernel32.SetProcessWorkingSetSize(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T)::BOOL
+struct _NOTIFYICONDATAW
+    data::NTuple{976, UInt8}
 end
 
-function SetProcessWorkingSetSizeEx(hProcess, dwMinimumWorkingSetSize, dwMaximumWorkingSetSize, Flags)
-    @ccall Kernel32.SetProcessWorkingSetSizeEx(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T, Flags::DWORD)::BOOL
+function Base.getproperty(x::Ptr{_NOTIFYICONDATAW}, f::Symbol)
+    f === :cbSize && return Ptr{DWORD}(x + 0)
+    f === :hWnd && return Ptr{HWND}(x + 8)
+    f === :uID && return Ptr{UINT}(x + 16)
+    f === :uFlags && return Ptr{UINT}(x + 20)
+    f === :uCallbackMessage && return Ptr{UINT}(x + 24)
+    f === :hIcon && return Ptr{HICON}(x + 32)
+    f === :szTip && return Ptr{NTuple{128, WCHAR}}(x + 40)
+    f === :dwState && return Ptr{DWORD}(x + 296)
+    f === :dwStateMask && return Ptr{DWORD}(x + 300)
+    f === :szInfo && return Ptr{NTuple{256, WCHAR}}(x + 304)
+    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#300"}(x + 816)
+    f === :szInfoTitle && return Ptr{NTuple{64, WCHAR}}(x + 820)
+    f === :dwInfoFlags && return Ptr{DWORD}(x + 948)
+    f === :guidItem && return Ptr{GUID}(x + 952)
+    f === :hBalloonIcon && return Ptr{HICON}(x + 968)
+    return getfield(x, f)
 end
 
-function CreateFileW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
-    @ccall Kernel32.CreateFileW(lpFileName::LPCWSTR, dwDesiredAccess::DWORD, dwShareMode::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES, dwCreationDisposition::DWORD, dwFlagsAndAttributes::DWORD, hTemplateFile::HANDLE)::HANDLE
+function Base.getproperty(x::_NOTIFYICONDATAW, f::Symbol)
+    r = Ref{_NOTIFYICONDATAW}(x)
+    ptr = Base.unsafe_convert(Ptr{_NOTIFYICONDATAW}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
 end
 
-function GetFileSizeEx(hFile, lpFileSize)
-    @ccall Kernel32.GetFileSizeEx(hFile::HANDLE, lpFileSize::PLARGE_INTEGER)::BOOL
+function Base.setproperty!(x::Ptr{_NOTIFYICONDATAW}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
-function CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
-    @ccall Kernel32.CreateNamedPipeW(lpName::LPCWSTR, dwOpenMode::DWORD, dwPipeMode::DWORD, nMaxInstances::DWORD, nOutBufferSize::DWORD, nInBufferSize::DWORD, nDefaultTimeOut::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES)::HANDLE
+const NOTIFYICONDATAW = _NOTIFYICONDATAW
+
+const PNOTIFYICONDATAW = Ptr{_NOTIFYICONDATAW}
+
+function Shell_NotifyIconW(dwMessage, lpData)
+    @ccall ShellApi.Shell_NotifyIconW(dwMessage::DWORD, lpData::PNOTIFYICONDATAW)::BOOL
 end
 
-function WaitNamedPipeW(lpNamedPipeName, nTimeOut)
-    @ccall Kernel32.WaitNamedPipeW(lpNamedPipeName::LPCWSTR, nTimeOut::DWORD)::BOOL
-end
-
-function CallNamedPipeW(lpNamedPipeName, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesRead, nTimeOut)
-    @ccall Kernel32.CallNamedPipeW(lpNamedPipeName::LPCWSTR, lpInBuffer::LPVOID, nInBufferSize::DWORD, lpOutBuffer::LPVOID, nOutBufferSize::DWORD, lpBytesRead::LPDWORD, nTimeOut::DWORD)::BOOL
-end
-
-function ConnectNamedPipe(hNamedPipe, lpOverlapped)
-    @ccall Kernel32.ConnectNamedPipe(hNamedPipe::HANDLE, lpOverlapped::LPOVERLAPPED)::BOOL
-end
-
-function LoadLibraryExW(lpLibFileName, hFile, dwFlags)
-    @ccall Kernel32.LoadLibraryExW(lpLibFileName::LPCWSTR, hFile::HANDLE, dwFlags::DWORD)::HMODULE
-end
-
-function GetProcAddress(hModule, lpProcName)
-    @ccall Kernel32.GetProcAddress(hModule::HMODULE, lpProcName::LPCSTR)::FARPROC
-end
-
-function GetModuleHandleW(lpModuleName)
-    @ccall Kernel32.GetModuleHandleW(lpModuleName::LPCWSTR)::HMODULE
-end
-
-function GetLastError()
-    @ccall Kernel32.GetLastError()::DWORD
-end
-
-function GetCurrentProcess()
-    @ccall Kernel32.GetCurrentProcess()::HANDLE
-end
-
-function GetCurrentProcessId()
-    @ccall Kernel32.GetCurrentProcessId()::DWORD
-end
-
-function ExitProcess(uExitCode)
-    @ccall Kernel32.ExitProcess(uExitCode::UINT)::Cvoid
-end
-
-function TerminateProcess(hProcess, uExitCode)
-    @ccall Kernel32.TerminateProcess(hProcess::HANDLE, uExitCode::UINT)::BOOL
-end
-
-function GetExitCodeProcess(hProcess, lpExitCode)
-    @ccall Kernel32.GetExitCodeProcess(hProcess::HANDLE, lpExitCode::LPDWORD)::BOOL
-end
-
-struct var"##Ctag#295"
+struct var"##Ctag#299"
     Offset::DWORD
     OffsetHigh::DWORD
 end
-function Base.getproperty(x::Ptr{var"##Ctag#295"}, f::Symbol)
+function Base.getproperty(x::Ptr{var"##Ctag#299"}, f::Symbol)
     f === :Offset && return Ptr{DWORD}(x + 0)
     f === :OffsetHigh && return Ptr{DWORD}(x + 4)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::var"##Ctag#295", f::Symbol)
-    r = Ref{var"##Ctag#295"}(x)
-    ptr = Base.unsafe_convert(Ptr{var"##Ctag#295"}, r)
+function Base.getproperty(x::var"##Ctag#299", f::Symbol)
+    r = Ref{var"##Ctag#299"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#299"}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{var"##Ctag#295"}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{var"##Ctag#299"}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
 end
 
@@ -321,54 +302,6 @@ const VOID = Cvoid
 const TRUE = 1
 
 const LF_FACESIZE = 32
-
-const SECTION_MAP_WRITE = 0x0002
-
-const FILE_MAP_WRITE = SECTION_MAP_WRITE
-
-const SECTION_MAP_READ = 0x0004
-
-const FILE_MAP_READ = SECTION_MAP_READ
-
-const STANDARD_RIGHTS_REQUIRED = Clong(0x000f0000)
-
-const SECTION_QUERY = 0x0001
-
-const SECTION_MAP_EXECUTE = 0x0008
-
-const SECTION_EXTEND_SIZE = 0x0010
-
-const SECTION_ALL_ACCESS = ((((STANDARD_RIGHTS_REQUIRED | SECTION_QUERY) | SECTION_MAP_WRITE) | SECTION_MAP_READ) | SECTION_MAP_EXECUTE) | SECTION_EXTEND_SIZE
-
-const FILE_MAP_ALL_ACCESS = SECTION_ALL_ACCESS
-
-const SECTION_MAP_EXECUTE_EXPLICIT = 0x0020
-
-const FILE_MAP_EXECUTE = SECTION_MAP_EXECUTE_EXPLICIT
-
-const FILE_MAP_COPY = 0x00000001
-
-const FILE_MAP_RESERVE = 0x80000000
-
-const FILE_MAP_TARGETS_INVALID = 0x40000000
-
-const FILE_MAP_LARGE_PAGES = 0x20000000
-
-const CREATE_NEW = 1
-
-const CREATE_ALWAYS = 2
-
-const OPEN_EXISTING = 3
-
-const OPEN_ALWAYS = 4
-
-const TRUNCATE_EXISTING = 5
-
-const INVALID_FILE_SIZE = DWORD(0xffffffff)
-
-const INVALID_SET_FILE_POINTER = DWORD(0xffffffff)
-
-const INVALID_FILE_ATTRIBUTES = DWORD(0xffffffff)
 
 # Skipping MacroDefinition: STDMETHODVCALLTYPE __cdecl
 
@@ -413,6 +346,8 @@ const WRITE_DAC = Clong(0x00040000)
 const WRITE_OWNER = Clong(0x00080000)
 
 const SYNCHRONIZE = Clong(0x00100000)
+
+const STANDARD_RIGHTS_REQUIRED = Clong(0x000f0000)
 
 const STANDARD_RIGHTS_READ = READ_CONTROL
 
@@ -479,6 +414,34 @@ const FILE_ATTRIBUTE_UNPINNED = 0x00100000
 const FILE_ATTRIBUTE_RECALL_ON_OPEN = 0x00040000
 
 const FILE_ATTRIBUTE_RECALL_ON_DATA_ACCESS = 0x00400000
+
+const SECTION_QUERY = 0x0001
+
+const SECTION_MAP_WRITE = 0x0002
+
+const SECTION_MAP_READ = 0x0004
+
+const SECTION_MAP_EXECUTE = 0x0008
+
+const SECTION_EXTEND_SIZE = 0x0010
+
+const SECTION_MAP_EXECUTE_EXPLICIT = 0x0020
+
+const SECTION_ALL_ACCESS = ((((STANDARD_RIGHTS_REQUIRED | SECTION_QUERY) | SECTION_MAP_WRITE) | SECTION_MAP_READ) | SECTION_MAP_EXECUTE) | SECTION_EXTEND_SIZE
+
+const NIF_MESSAGE = 0x00000001
+
+const NIF_ICON = 0x00000002
+
+const NIF_TIP = 0x00000004
+
+const NIF_STATE = 0x00000008
+
+const NIF_INFO = 0x00000010
+
+const NIF_REALTIME = 0x00000040
+
+const NIF_SHOWTIP = 0x00000080
 
 nothing
 

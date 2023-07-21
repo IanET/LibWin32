@@ -21,8 +21,6 @@ const LONG = Clong
 
 const DWORD = Culong
 
-const COLORREF = DWORD
-
 const LONG_PTR = Clonglong
 
 const PVOID = Ptr{Cvoid}
@@ -129,24 +127,24 @@ const LARGE_INTEGER = _LARGE_INTEGER
 
 const PLARGE_INTEGER = Ptr{LARGE_INTEGER}
 
-struct var"##Ctag#296"
+struct var"##Ctag#301"
     data::NTuple{8, UInt8}
 end
 
-function Base.getproperty(x::Ptr{var"##Ctag#296"}, f::Symbol)
-    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#297"}(x + 0)
+function Base.getproperty(x::Ptr{var"##Ctag#301"}, f::Symbol)
+    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#302"}(x + 0)
     f === :Pointer && return Ptr{PVOID}(x + 0)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::var"##Ctag#296", f::Symbol)
-    r = Ref{var"##Ctag#296"}(x)
-    ptr = Base.unsafe_convert(Ptr{var"##Ctag#296"}, r)
+function Base.getproperty(x::var"##Ctag#301", f::Symbol)
+    r = Ref{var"##Ctag#301"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#301"}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{var"##Ctag#296"}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{var"##Ctag#301"}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
 end
 
@@ -157,7 +155,7 @@ end
 function Base.getproperty(x::Ptr{_OVERLAPPED}, f::Symbol)
     f === :Internal && return Ptr{ULONG_PTR}(x + 0)
     f === :InternalHigh && return Ptr{ULONG_PTR}(x + 8)
-    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#296"}(x + 16)
+    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#301"}(x + 16)
     f === :hEvent && return Ptr{HANDLE}(x + 24)
     return getfield(x, f)
 end
@@ -177,44 +175,33 @@ const OVERLAPPED = _OVERLAPPED
 
 const LPOVERLAPPED = Ptr{_OVERLAPPED}
 
-const LPCOLORREF = Ptr{DWORD}
-
-const HGDIOBJ = HANDLE
-
-const HBRUSH = HANDLE
-
-const HFONT = HANDLE
-
-function CreateSolidBrush(color)
-    @ccall Gdi32.CreateSolidBrush(color::COLORREF)::HBRUSH
+@cenum _LI_METRIC::UInt32 begin
+    LIM_SMALL = 0
+    LIM_LARGE = 1
 end
 
-function DeleteObject(ho)
-    @ccall Gdi32.DeleteObject(ho::HGDIOBJ)::BOOL
+function LoadIconMetric(hinst, pszName, lims, phico)
+    @ccall CommCtrl.LoadIconMetric(hinst::HINSTANCE, pszName::PCWSTR, lims::Cint, phico::Ptr{HICON})::HRESULT
 end
 
-function CreateFontIndirectW(lplf)
-    @ccall Gdi32.CreateFontIndirectW(lplf::Ptr{LOGFONTW})::HFONT
-end
-
-struct var"##Ctag#297"
+struct var"##Ctag#302"
     Offset::DWORD
     OffsetHigh::DWORD
 end
-function Base.getproperty(x::Ptr{var"##Ctag#297"}, f::Symbol)
+function Base.getproperty(x::Ptr{var"##Ctag#302"}, f::Symbol)
     f === :Offset && return Ptr{DWORD}(x + 0)
     f === :OffsetHigh && return Ptr{DWORD}(x + 4)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::var"##Ctag#297", f::Symbol)
-    r = Ref{var"##Ctag#297"}(x)
-    ptr = Base.unsafe_convert(Ptr{var"##Ctag#297"}, r)
+function Base.getproperty(x::var"##Ctag#302", f::Symbol)
+    r = Ref{var"##Ctag#302"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#302"}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{var"##Ctag#297"}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{var"##Ctag#302"}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
 end
 
@@ -252,6 +239,16 @@ const VOID = Cvoid
 const TRUE = 1
 
 const LF_FACESIZE = 32
+
+const NIM_ADD = 0x00000000
+
+const NIM_MODIFY = 0x00000001
+
+const NIM_DELETE = 0x00000002
+
+const NIM_SETFOCUS = 0x00000003
+
+const NIM_SETVERSION = 0x00000004
 
 nothing
 

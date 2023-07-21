@@ -3,6 +3,8 @@ using CEnum
 const Kernel32 = "kernel32.dll"
 const Gdi32 = "gdi32.dll"
 const User32 = "user32.dll"
+const ShellApi = "Shell32.dll"
+const CommCtrl = "ComCtl32.dll"
 
 macro L_str(s) Base.cconvert(Cwstring, s) end
 
@@ -72,6 +74,16 @@ const LPDWORD = Ptr{DWORD}
 
 const PDWORD = Ptr{DWORD}
 
+const LPVOID = Ptr{Cvoid}
+
+const LONGLONG = Clonglong
+
+const HICON = HANDLE
+
+const HRESULT = LONG
+
+const PCWSTR = Ptr{WCHAR}
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
@@ -97,7 +109,73 @@ const NPLOGFONTW = Ptr{tagLOGFONTW}
 
 const LPLOGFONTW = Ptr{tagLOGFONTW}
 
-const HICON = HANDLE
+struct _SECURITY_ATTRIBUTES
+    nLength::DWORD
+    lpSecurityDescriptor::LPVOID
+    bInheritHandle::BOOL
+end
+
+const SECURITY_ATTRIBUTES = _SECURITY_ATTRIBUTES
+
+const PSECURITY_ATTRIBUTES = Ptr{_SECURITY_ATTRIBUTES}
+
+const LPSECURITY_ATTRIBUTES = Ptr{_SECURITY_ATTRIBUTES}
+
+struct _LARGE_INTEGER
+    QuadPart::LONGLONG
+end
+
+const LARGE_INTEGER = _LARGE_INTEGER
+
+const PLARGE_INTEGER = Ptr{LARGE_INTEGER}
+
+struct var"##Ctag#292"
+    data::NTuple{8, UInt8}
+end
+
+function Base.getproperty(x::Ptr{var"##Ctag#292"}, f::Symbol)
+    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#293"}(x + 0)
+    f === :Pointer && return Ptr{PVOID}(x + 0)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::var"##Ctag#292", f::Symbol)
+    r = Ref{var"##Ctag#292"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#292"}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{var"##Ctag#292"}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
+struct _OVERLAPPED
+    data::NTuple{32, UInt8}
+end
+
+function Base.getproperty(x::Ptr{_OVERLAPPED}, f::Symbol)
+    f === :Internal && return Ptr{ULONG_PTR}(x + 0)
+    f === :InternalHigh && return Ptr{ULONG_PTR}(x + 8)
+    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#292"}(x + 16)
+    f === :hEvent && return Ptr{HANDLE}(x + 24)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::_OVERLAPPED, f::Symbol)
+    r = Ref{_OVERLAPPED}(x)
+    ptr = Base.unsafe_convert(Ptr{_OVERLAPPED}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{_OVERLAPPED}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
+const OVERLAPPED = _OVERLAPPED
+
+const LPOVERLAPPED = Ptr{_OVERLAPPED}
 
 const HGLOBAL = HANDLE
 
@@ -115,8 +193,6 @@ const LRESULT = LONG_PTR
 const WNDPROC = Ptr{Cvoid}
 
 const WPARAM = UINT_PTR
-
-const LPVOID = Ptr{Cvoid}
 
 const HDC = HANDLE
 
@@ -341,19 +417,41 @@ function GetCursorPos(lpPoint)
     @ccall User32.GetCursorPos(lpPoint::LPPOINT)::BOOL
 end
 
+struct var"##Ctag#293"
+    Offset::DWORD
+    OffsetHigh::DWORD
+end
+function Base.getproperty(x::Ptr{var"##Ctag#293"}, f::Symbol)
+    f === :Offset && return Ptr{DWORD}(x + 0)
+    f === :OffsetHigh && return Ptr{DWORD}(x + 4)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::var"##Ctag#293", f::Symbol)
+    r = Ref{var"##Ctag#293"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#293"}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{var"##Ctag#293"}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
+
 const WINVER = 0x0603
 
 const _WIN32_WINNT = 0x0603
 
-# Skipping MacroDefinition: CALLBACK __attribute__ ( ( stdcall ) )
-
-# Skipping MacroDefinition: WINAPI __attribute__ ( ( stdcall ) )
-
-# Skipping MacroDefinition: WINUSERAPI __attribute__ ( ( stdcall ) )
-
-# Skipping MacroDefinition: WINBASEAPI __attribute__ ( ( stdcall ) )
-
 # Skipping MacroDefinition: DECLSPEC_NORETURN __attribute__ ( ( noreturn ) )
+
+# Skipping MacroDefinition: CALLBACK __cdecl
+
+# Skipping MacroDefinition: WINAPI __cdecl
+
+# Skipping MacroDefinition: WINUSERAPI __cdecl
+
+# Skipping MacroDefinition: WINBASEAPI __cdecl
 
 const wchar_t = Cushort
 
@@ -818,6 +916,8 @@ const WM_PALETTEISCHANGING = 0x0310
 const WM_PALETTECHANGED = 0x0311
 
 const WM_HOTKEY = 0x0312
+
+const WM_APP = 0x8000
 
 const SW_HIDE = 0
 
@@ -1332,6 +1432,78 @@ const SPI_SETCARETTIMEOUT = 0x2023
 const SPI_GETHANDEDNESS = 0x2024
 
 const SPI_SETHANDEDNESS = 0x2025
+
+const COLOR_SCROLLBAR = 0
+
+const COLOR_BACKGROUND = 1
+
+const COLOR_ACTIVECAPTION = 2
+
+const COLOR_INACTIVECAPTION = 3
+
+const COLOR_MENU = 4
+
+const COLOR_WINDOW = 5
+
+const COLOR_WINDOWFRAME = 6
+
+const COLOR_MENUTEXT = 7
+
+const COLOR_WINDOWTEXT = 8
+
+const COLOR_CAPTIONTEXT = 9
+
+const COLOR_ACTIVEBORDER = 10
+
+const COLOR_INACTIVEBORDER = 11
+
+const COLOR_APPWORKSPACE = 12
+
+const COLOR_HIGHLIGHT = 13
+
+const COLOR_HIGHLIGHTTEXT = 14
+
+const COLOR_BTNFACE = 15
+
+const COLOR_BTNSHADOW = 16
+
+const COLOR_GRAYTEXT = 17
+
+const COLOR_BTNTEXT = 18
+
+const COLOR_INACTIVECAPTIONTEXT = 19
+
+const COLOR_BTNHIGHLIGHT = 20
+
+const COLOR_3DDKSHADOW = 21
+
+const COLOR_3DLIGHT = 22
+
+const COLOR_INFOTEXT = 23
+
+const COLOR_INFOBK = 24
+
+const COLOR_HOTLIGHT = 26
+
+const COLOR_GRADIENTACTIVECAPTION = 27
+
+const COLOR_GRADIENTINACTIVECAPTION = 28
+
+const COLOR_MENUHILIGHT = 29
+
+const COLOR_MENUBAR = 30
+
+const COLOR_DESKTOP = COLOR_BACKGROUND
+
+const COLOR_3DFACE = COLOR_BTNFACE
+
+const COLOR_3DSHADOW = COLOR_BTNSHADOW
+
+const COLOR_3DHIGHLIGHT = COLOR_BTNHIGHLIGHT
+
+const COLOR_3DHILIGHT = COLOR_BTNHIGHLIGHT
+
+const COLOR_BTNHILIGHT = COLOR_BTNHIGHLIGHT
 
 nothing
 
