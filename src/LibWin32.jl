@@ -5,5 +5,6 @@ include("LibGdi32.jl")
 include("LibUser32.jl")
 include("LibCommCtrl.jl")
 include("LibShellApi.jl")
+include("LibWinError.jl")
 
 end

@@ -21,6 +21,8 @@ const LONG = Clong
 
 const DWORD = Culong
 
+const NTSTATUS = Clong
+
 const LONG_PTR = Clonglong
 
 const PVOID = Ptr{Cvoid}
@@ -82,6 +84,8 @@ const HRESULT = LONG
 
 const PCWSTR = Ptr{WCHAR}
 
+const LPCVOID = Ptr{Cvoid}
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
@@ -107,6 +111,9 @@ const NPLOGFONTW = Ptr{tagLOGFONTW}
 
 const LPLOGFONTW = Ptr{tagLOGFONTW}
 
+# typedef INT_PTR ( FAR WINAPI * FARPROC
+const FARPROC = Ptr{Cvoid}
+
 struct _SECURITY_ATTRIBUTES
     nLength::DWORD
     lpSecurityDescriptor::LPVOID
@@ -127,24 +134,24 @@ const LARGE_INTEGER = _LARGE_INTEGER
 
 const PLARGE_INTEGER = Ptr{LARGE_INTEGER}
 
-struct var"##Ctag#294"
+struct var"##Ctag#292"
     data::NTuple{8, UInt8}
 end
 
-function Base.getproperty(x::Ptr{var"##Ctag#294"}, f::Symbol)
-    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#295"}(x + 0)
+function Base.getproperty(x::Ptr{var"##Ctag#292"}, f::Symbol)
+    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#293"}(x + 0)
     f === :Pointer && return Ptr{PVOID}(x + 0)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::var"##Ctag#294", f::Symbol)
-    r = Ref{var"##Ctag#294"}(x)
-    ptr = Base.unsafe_convert(Ptr{var"##Ctag#294"}, r)
+function Base.getproperty(x::var"##Ctag#292", f::Symbol)
+    r = Ref{var"##Ctag#292"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#292"}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{var"##Ctag#294"}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{var"##Ctag#292"}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
 end
 
@@ -155,7 +162,7 @@ end
 function Base.getproperty(x::Ptr{_OVERLAPPED}, f::Symbol)
     f === :Internal && return Ptr{ULONG_PTR}(x + 0)
     f === :InternalHigh && return Ptr{ULONG_PTR}(x + 8)
-    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#294"}(x + 16)
+    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#292"}(x + 16)
     f === :hEvent && return Ptr{HANDLE}(x + 24)
     return getfield(x, f)
 end
@@ -175,8 +182,8 @@ const OVERLAPPED = _OVERLAPPED
 
 const LPOVERLAPPED = Ptr{_OVERLAPPED}
 
-# typedef INT_PTR ( FAR WINAPI * FARPROC
-const FARPROC = Ptr{Cvoid}
+# typedef VOID ( WINAPI * LPOVERLAPPED_COMPLETION_ROUTINE
+const LPOVERLAPPED_COMPLETION_ROUTINE = Ptr{Cvoid}
 
 function CreateFileMappingW(hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName)
     @ccall Kernel32.CreateFileMappingW(hFile::HANDLE, lpFileMappingAttributes::LPSECURITY_ATTRIBUTES, flProtect::DWORD, dwMaximumSizeHigh::DWORD, dwMaximumSizeLow::DWORD, lpName::LPCWSTR)::HANDLE
@@ -214,6 +221,18 @@ function GetFileSizeEx(hFile, lpFileSize)
     @ccall Kernel32.GetFileSizeEx(hFile::HANDLE, lpFileSize::PLARGE_INTEGER)::BOOL
 end
 
+function WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped)
+    @ccall Kernel32.WriteFile(hFile::HANDLE, lpBuffer::LPCVOID, nNumberOfBytesToWrite::DWORD, lpNumberOfBytesWritten::LPDWORD, lpOverlapped::LPOVERLAPPED)::BOOL
+end
+
+function ReadFile(hFile, lpBuffer, nNumberOfBytesToRead, lpNumberOfBytesRead, lpOverlapped)
+    @ccall Kernel32.ReadFile(hFile::HANDLE, lpBuffer::LPVOID, nNumberOfBytesToRead::DWORD, lpNumberOfBytesRead::LPDWORD, lpOverlapped::LPOVERLAPPED)::BOOL
+end
+
+function ReadFileEx(hFile, lpBuffer, nNumberOfBytesToRead, lpOverlapped, lpCompletionRoutine)
+    @ccall Kernel32.ReadFileEx(hFile::HANDLE, lpBuffer::LPVOID, nNumberOfBytesToRead::DWORD, lpOverlapped::LPOVERLAPPED, lpCompletionRoutine::LPOVERLAPPED_COMPLETION_ROUTINE)::BOOL
+end
+
 function CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
     @ccall Kernel32.CreateNamedPipeW(lpName::LPCWSTR, dwOpenMode::DWORD, dwPipeMode::DWORD, nMaxInstances::DWORD, nOutBufferSize::DWORD, nInBufferSize::DWORD, nDefaultTimeOut::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES)::HANDLE
 end
@@ -228,6 +247,30 @@ end
 
 function ConnectNamedPipe(hNamedPipe, lpOverlapped)
     @ccall Kernel32.ConnectNamedPipe(hNamedPipe::HANDLE, lpOverlapped::LPOVERLAPPED)::BOOL
+end
+
+function CreateEventW(lpEventAttributes, bManualReset, bInitialState, lpName)
+    @ccall Kernel32.CreateEventW(lpEventAttributes::LPSECURITY_ATTRIBUTES, bManualReset::BOOL, bInitialState::BOOL, lpName::LPCWSTR)::HANDLE
+end
+
+function SetEvent(hEvent)
+    @ccall Kernel32.SetEvent(hEvent::HANDLE)::BOOL
+end
+
+function ResetEvent(hEvent)
+    @ccall Kernel32.ResetEvent(hEvent::HANDLE)::BOOL
+end
+
+function WaitForSingleObject(hHandle, dwMilliseconds)
+    @ccall Kernel32.WaitForSingleObject(hHandle::HANDLE, dwMilliseconds::DWORD)::DWORD
+end
+
+function SleepEx(dwMilliseconds, bAlertable)
+    @ccall Kernel32.SleepEx(dwMilliseconds::DWORD, bAlertable::BOOL)::DWORD
+end
+
+function CloseHandle(hObject)
+    @ccall Kernel32.CloseHandle(hObject::HANDLE)::BOOL
 end
 
 function LoadLibraryExW(lpLibFileName, hFile, dwFlags)
@@ -266,24 +309,24 @@ function GetExitCodeProcess(hProcess, lpExitCode)
     @ccall Kernel32.GetExitCodeProcess(hProcess::HANDLE, lpExitCode::LPDWORD)::BOOL
 end
 
-struct var"##Ctag#295"
+struct var"##Ctag#293"
     Offset::DWORD
     OffsetHigh::DWORD
 end
-function Base.getproperty(x::Ptr{var"##Ctag#295"}, f::Symbol)
+function Base.getproperty(x::Ptr{var"##Ctag#293"}, f::Symbol)
     f === :Offset && return Ptr{DWORD}(x + 0)
     f === :OffsetHigh && return Ptr{DWORD}(x + 4)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::var"##Ctag#295", f::Symbol)
-    r = Ref{var"##Ctag#295"}(x)
-    ptr = Base.unsafe_convert(Ptr{var"##Ctag#295"}, r)
+function Base.getproperty(x::var"##Ctag#293", f::Symbol)
+    r = Ref{var"##Ctag#293"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#293"}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{var"##Ctag#295"}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{var"##Ctag#293"}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
 end
 
@@ -320,7 +363,77 @@ const VOID = Cvoid
 
 const TRUE = 1
 
+const FALSE = 0
+
 const LF_FACESIZE = 32
+
+const STATUS_ABANDONED_WAIT_0 = NTSTATUS(0x00000080)
+
+const STATUS_WAIT_0 = NTSTATUS(Clong(0x00000000))
+
+const STATUS_USER_APC = NTSTATUS(Clong(0x000000c0))
+
+const FILE_FLAG_WRITE_THROUGH = 0x80000000
+
+const FILE_FLAG_OVERLAPPED = 0x40000000
+
+const FILE_FLAG_NO_BUFFERING = 0x20000000
+
+const FILE_FLAG_RANDOM_ACCESS = 0x10000000
+
+const FILE_FLAG_SEQUENTIAL_SCAN = 0x08000000
+
+const FILE_FLAG_DELETE_ON_CLOSE = 0x04000000
+
+const FILE_FLAG_BACKUP_SEMANTICS = 0x02000000
+
+const FILE_FLAG_POSIX_SEMANTICS = 0x01000000
+
+const FILE_FLAG_SESSION_AWARE = 0x00800000
+
+const FILE_FLAG_OPEN_REPARSE_POINT = 0x00200000
+
+const FILE_FLAG_OPEN_NO_RECALL = 0x00100000
+
+const FILE_FLAG_FIRST_PIPE_INSTANCE = 0x00080000
+
+const PIPE_ACCESS_INBOUND = 0x00000001
+
+const PIPE_ACCESS_OUTBOUND = 0x00000002
+
+const PIPE_ACCESS_DUPLEX = 0x00000003
+
+const PIPE_CLIENT_END = 0x00000000
+
+const PIPE_SERVER_END = 0x00000001
+
+const PIPE_WAIT = 0x00000000
+
+const PIPE_NOWAIT = 0x00000001
+
+const PIPE_READMODE_BYTE = 0x00000000
+
+const PIPE_READMODE_MESSAGE = 0x00000002
+
+const PIPE_TYPE_BYTE = 0x00000000
+
+const PIPE_TYPE_MESSAGE = 0x00000004
+
+const PIPE_ACCEPT_REMOTE_CLIENTS = 0x00000000
+
+const PIPE_REJECT_REMOTE_CLIENTS = 0x00000008
+
+const PIPE_UNLIMITED_INSTANCES = 255
+
+const WAIT_FAILED = DWORD(0xffffffff)
+
+const WAIT_OBJECT_0 = STATUS_WAIT_0 + 0
+
+const WAIT_ABANDONED = STATUS_ABANDONED_WAIT_0 + 0
+
+const WAIT_ABANDONED_0 = STATUS_ABANDONED_WAIT_0 + 0
+
+const WAIT_IO_COMPLETION = STATUS_USER_APC
 
 const SECTION_MAP_WRITE = 0x0002
 
