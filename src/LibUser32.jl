@@ -84,7 +84,7 @@ const HRESULT = LONG
 
 const PCWSTR = Ptr{WCHAR}
 
-const LPCVOID = Ptr{Cvoid}
+const PWORD = Ptr{WORD}
 
 struct tagLOGFONTW
     lfHeight::LONG
@@ -110,6 +110,74 @@ const PLOGFONTW = Ptr{tagLOGFONTW}
 const NPLOGFONTW = Ptr{tagLOGFONTW}
 
 const LPLOGFONTW = Ptr{tagLOGFONTW}
+
+struct _SECURITY_ATTRIBUTES
+    nLength::DWORD
+    lpSecurityDescriptor::LPVOID
+    bInheritHandle::BOOL
+end
+
+const SECURITY_ATTRIBUTES = _SECURITY_ATTRIBUTES
+
+const PSECURITY_ATTRIBUTES = Ptr{_SECURITY_ATTRIBUTES}
+
+const LPSECURITY_ATTRIBUTES = Ptr{_SECURITY_ATTRIBUTES}
+
+struct _LARGE_INTEGER
+    QuadPart::LONGLONG
+end
+
+const LARGE_INTEGER = _LARGE_INTEGER
+
+const PLARGE_INTEGER = Ptr{LARGE_INTEGER}
+
+struct var"##Ctag#292"
+    data::NTuple{8, UInt8}
+end
+
+function Base.getproperty(x::Ptr{var"##Ctag#292"}, f::Symbol)
+    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#293"}(x + 0)
+    f === :Pointer && return Ptr{PVOID}(x + 0)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::var"##Ctag#292", f::Symbol)
+    r = Ref{var"##Ctag#292"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#292"}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{var"##Ctag#292"}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
+struct _OVERLAPPED
+    data::NTuple{32, UInt8}
+end
+
+function Base.getproperty(x::Ptr{_OVERLAPPED}, f::Symbol)
+    f === :Internal && return Ptr{ULONG_PTR}(x + 0)
+    f === :InternalHigh && return Ptr{ULONG_PTR}(x + 8)
+    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#292"}(x + 16)
+    f === :hEvent && return Ptr{HANDLE}(x + 24)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::_OVERLAPPED, f::Symbol)
+    r = Ref{_OVERLAPPED}(x)
+    ptr = Base.unsafe_convert(Ptr{_OVERLAPPED}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{_OVERLAPPED}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
+const OVERLAPPED = _OVERLAPPED
+
+const LPOVERLAPPED = Ptr{_OVERLAPPED}
 
 const HGLOBAL = HANDLE
 
@@ -351,6 +419,36 @@ function GetCursorPos(lpPoint)
     @ccall User32.GetCursorPos(lpPoint::LPPOINT)::BOOL
 end
 
+function GetDC(hWnd)
+    @ccall User32.GetDC(hWnd::HWND)::HDC
+end
+
+function ReleaseDC(hWnd, hDC)
+    @ccall User32.ReleaseDC(hWnd::HWND, hDC::HDC)::Cint
+end
+
+struct var"##Ctag#293"
+    Offset::DWORD
+    OffsetHigh::DWORD
+end
+function Base.getproperty(x::Ptr{var"##Ctag#293"}, f::Symbol)
+    f === :Offset && return Ptr{DWORD}(x + 0)
+    f === :OffsetHigh && return Ptr{DWORD}(x + 4)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::var"##Ctag#293", f::Symbol)
+    r = Ref{var"##Ctag#293"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#293"}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{var"##Ctag#293"}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
+
 const WINVER = 0x0603
 
 const _WIN32_WINNT = 0x0603
@@ -382,8 +480,6 @@ HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 const VOID = Cvoid
 
 const TRUE = 1
-
-const FALSE = 0
 
 const LF_FACESIZE = 32
 

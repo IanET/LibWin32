@@ -11,6 +11,8 @@ macro L_str(s) Base.cconvert(Cwstring, s) end
 MAKEINTRESOURCEW(i) = LPWSTR(i)
 
 
+const WORD = Cushort
+
 const BYTE = Cuchar
 
 const ULONG_PTR = Culonglong
@@ -82,7 +84,7 @@ const HRESULT = LONG
 
 const PCWSTR = Ptr{WCHAR}
 
-const LPCVOID = Ptr{Cvoid}
+const PWORD = Ptr{WORD}
 
 struct tagLOGFONTW
     lfHeight::LONG
@@ -109,6 +111,74 @@ const NPLOGFONTW = Ptr{tagLOGFONTW}
 
 const LPLOGFONTW = Ptr{tagLOGFONTW}
 
+struct _SECURITY_ATTRIBUTES
+    nLength::DWORD
+    lpSecurityDescriptor::LPVOID
+    bInheritHandle::BOOL
+end
+
+const SECURITY_ATTRIBUTES = _SECURITY_ATTRIBUTES
+
+const PSECURITY_ATTRIBUTES = Ptr{_SECURITY_ATTRIBUTES}
+
+const LPSECURITY_ATTRIBUTES = Ptr{_SECURITY_ATTRIBUTES}
+
+struct _LARGE_INTEGER
+    QuadPart::LONGLONG
+end
+
+const LARGE_INTEGER = _LARGE_INTEGER
+
+const PLARGE_INTEGER = Ptr{LARGE_INTEGER}
+
+struct var"##Ctag#298"
+    data::NTuple{8, UInt8}
+end
+
+function Base.getproperty(x::Ptr{var"##Ctag#298"}, f::Symbol)
+    f === :DUMMYSTRUCTNAME && return Ptr{var"##Ctag#299"}(x + 0)
+    f === :Pointer && return Ptr{PVOID}(x + 0)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::var"##Ctag#298", f::Symbol)
+    r = Ref{var"##Ctag#298"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#298"}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{var"##Ctag#298"}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
+struct _OVERLAPPED
+    data::NTuple{32, UInt8}
+end
+
+function Base.getproperty(x::Ptr{_OVERLAPPED}, f::Symbol)
+    f === :Internal && return Ptr{ULONG_PTR}(x + 0)
+    f === :InternalHigh && return Ptr{ULONG_PTR}(x + 8)
+    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#298"}(x + 16)
+    f === :hEvent && return Ptr{HANDLE}(x + 24)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::_OVERLAPPED, f::Symbol)
+    r = Ref{_OVERLAPPED}(x)
+    ptr = Base.unsafe_convert(Ptr{_OVERLAPPED}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{_OVERLAPPED}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
+const OVERLAPPED = _OVERLAPPED
+
+const LPOVERLAPPED = Ptr{_OVERLAPPED}
+
 struct _GUID
     Data1::Culong
     Data2::Cushort
@@ -118,24 +188,24 @@ end
 
 const GUID = _GUID
 
-struct var"##Ctag#294"
+struct var"##Ctag#300"
     data::NTuple{4, UInt8}
 end
 
-function Base.getproperty(x::Ptr{var"##Ctag#294"}, f::Symbol)
+function Base.getproperty(x::Ptr{var"##Ctag#300"}, f::Symbol)
     f === :uTimeout && return Ptr{UINT}(x + 0)
     f === :uVersion && return Ptr{UINT}(x + 0)
     return getfield(x, f)
 end
 
-function Base.getproperty(x::var"##Ctag#294", f::Symbol)
-    r = Ref{var"##Ctag#294"}(x)
-    ptr = Base.unsafe_convert(Ptr{var"##Ctag#294"}, r)
+function Base.getproperty(x::var"##Ctag#300", f::Symbol)
+    r = Ref{var"##Ctag#300"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#300"}, r)
     fptr = getproperty(ptr, f)
     GC.@preserve r unsafe_load(fptr)
 end
 
-function Base.setproperty!(x::Ptr{var"##Ctag#294"}, f::Symbol, v)
+function Base.setproperty!(x::Ptr{var"##Ctag#300"}, f::Symbol, v)
     unsafe_store!(getproperty(x, f), v)
 end
 
@@ -154,7 +224,7 @@ function Base.getproperty(x::Ptr{_NOTIFYICONDATAW}, f::Symbol)
     f === :dwState && return Ptr{DWORD}(x + 296)
     f === :dwStateMask && return Ptr{DWORD}(x + 300)
     f === :szInfo && return Ptr{NTuple{256, WCHAR}}(x + 304)
-    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#294"}(x + 816)
+    f === :DUMMYUNIONNAME && return Ptr{var"##Ctag#300"}(x + 816)
     f === :szInfoTitle && return Ptr{NTuple{64, WCHAR}}(x + 820)
     f === :dwInfoFlags && return Ptr{DWORD}(x + 948)
     f === :guidItem && return Ptr{GUID}(x + 952)
@@ -180,6 +250,28 @@ const PNOTIFYICONDATAW = Ptr{_NOTIFYICONDATAW}
 function Shell_NotifyIconW(dwMessage, lpData)
     @ccall ShellApi.Shell_NotifyIconW(dwMessage::DWORD, lpData::PNOTIFYICONDATAW)::BOOL
 end
+
+struct var"##Ctag#299"
+    Offset::DWORD
+    OffsetHigh::DWORD
+end
+function Base.getproperty(x::Ptr{var"##Ctag#299"}, f::Symbol)
+    f === :Offset && return Ptr{DWORD}(x + 0)
+    f === :OffsetHigh && return Ptr{DWORD}(x + 4)
+    return getfield(x, f)
+end
+
+function Base.getproperty(x::var"##Ctag#299", f::Symbol)
+    r = Ref{var"##Ctag#299"}(x)
+    ptr = Base.unsafe_convert(Ptr{var"##Ctag#299"}, r)
+    fptr = getproperty(ptr, f)
+    GC.@preserve r unsafe_load(fptr)
+end
+
+function Base.setproperty!(x::Ptr{var"##Ctag#299"}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 
 const WINVER = 0x0603
 
@@ -212,8 +304,6 @@ HIBYTE(w) = BYTE(DWORD_PTR(w) >> 8 & 0xff)
 const VOID = Cvoid
 
 const TRUE = 1
-
-const FALSE = 0
 
 const LF_FACESIZE = 32
 
