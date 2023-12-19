@@ -307,6 +307,25 @@ const PNONCLIENTMETRICSW = Ptr{tagNONCLIENTMETRICSW}
 
 const LPNONCLIENTMETRICSW = Ptr{tagNONCLIENTMETRICSW}
 
+struct tagCREATESTRUCTW
+    lpCreateParams::LPVOID
+    hInstance::HINSTANCE
+    hMenu::HMENU
+    hwndParent::HWND
+    cy::Cint
+    cx::Cint
+    y::Cint
+    x::Cint
+    style::LONG
+    lpszName::LPCWSTR
+    lpszClass::LPCWSTR
+    dwExStyle::DWORD
+end
+
+const CREATESTRUCTW = tagCREATESTRUCTW
+
+const LPCREATESTRUCTW = Ptr{tagCREATESTRUCTW}
+
 function EnumWindowsProc(hwnd, lParam)
     @ccall User32.EnumWindowsProc(hwnd::HWND, lParam::LPARAM)::BOOL
 end
