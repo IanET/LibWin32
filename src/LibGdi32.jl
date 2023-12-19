@@ -261,6 +261,10 @@ function BitBlt(hdc, x, y, cx, cy, hdcSrc, x1, y1, rop)
     @ccall Gdi32.BitBlt(hdc::HDC, x::Cint, y::Cint, cx::Cint, cy::Cint, hdcSrc::HDC, x1::Cint, y1::Cint, rop::DWORD)::BOOL
 end
 
+function DeleteDC(hdc)
+    @ccall Gdi32.DeleteDC(hdc::HDC)::BOOL
+end
+
 struct var"##Ctag#297"
     Offset::DWORD
     OffsetHigh::DWORD
