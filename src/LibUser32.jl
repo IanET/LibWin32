@@ -29,6 +29,8 @@ const LPWSTR = Ptr{WCHAR}
 
 const LONG_PTR = Clonglong
 
+const LRESULT = LONG_PTR
+
 const PVOID = Ptr{Cvoid}
 
 const HANDLE = PVOID
@@ -188,8 +190,6 @@ const HBRUSH = HANDLE
 const HMENU = HANDLE
 
 const ATOM = WORD
-
-const LRESULT = LONG_PTR
 
 # typedef LRESULT ( CALLBACK * WNDPROC
 const WNDPROC = Ptr{Cvoid}
@@ -425,6 +425,10 @@ end
 
 function ReleaseDC(hWnd, hDC)
     @ccall User32.ReleaseDC(hWnd::HWND, hDC::HDC)::Cint
+end
+
+function SetWindowLongPtrW(hWnd, nIndex, dwNewLong)
+    @ccall User32.SetWindowLongPtrW(hWnd::HWND, nIndex::Cint, dwNewLong::LONG_PTR)::LONG_PTR
 end
 
 struct var"##Ctag#293"
@@ -1514,6 +1518,12 @@ const COLOR_3DHIGHLIGHT = COLOR_BTNHIGHLIGHT
 const COLOR_3DHILIGHT = COLOR_BTNHIGHLIGHT
 
 const COLOR_BTNHILIGHT = COLOR_BTNHIGHLIGHT
+
+const DWLP_MSGRESULT = 0
+
+# Skipping MacroDefinition: DWLP_DLGPROC DWLP_MSGRESULT + sizeof ( LRESULT )
+
+# Skipping MacroDefinition: DWLP_USER DWLP_DLGPROC + sizeof ( DLGPROC )
 
 nothing
 
