@@ -265,6 +265,14 @@ function DeleteDC(hdc)
     @ccall Gdi32.DeleteDC(hdc::HDC)::BOOL
 end
 
+function StretchBlt(hdcDest, xDest, yDest, wDest, hDest, hdcSrc, xSrc, ySrc, wSrc, hSrc, rop)
+    @ccall Gdi32.StretchBlt(hdcDest::HDC, xDest::Cint, yDest::Cint, wDest::Cint, hDest::Cint, hdcSrc::HDC, xSrc::Cint, ySrc::Cint, wSrc::Cint, hSrc::Cint, rop::DWORD)::BOOL
+end
+
+function SetStretchBltMode(hdc, mode)
+    @ccall Gdi32.SetStretchBltMode(hdc::HDC, mode::Cint)::Cint
+end
+
 struct var"##Ctag#297"
     Offset::DWORD
     OffsetHigh::DWORD
@@ -366,6 +374,24 @@ const DSTINVERT = DWORD(0x00550009)
 const BLACKNESS = DWORD(0x00000042)
 
 const WHITENESS = DWORD(0x00ff0062)
+
+const BLACKONWHITE = 1
+
+const WHITEONBLACK = 2
+
+const COLORONCOLOR = 3
+
+const HALFTONE = 4
+
+const MAXSTRETCHBLTMODE = 4
+
+const STRETCH_ANDSCANS = BLACKONWHITE
+
+const STRETCH_ORSCANS = WHITEONBLACK
+
+const STRETCH_DELETESCANS = COLORONCOLOR
+
+const STRETCH_HALFTONE = HALFTONE
 
 nothing
 
