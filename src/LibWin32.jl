@@ -224,12 +224,23 @@ function SetProcessWorkingSetSizeEx(hProcess, dwMinimumWorkingSetSize, dwMaximum
     @ccall Kernel32.SetProcessWorkingSetSizeEx(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T, Flags::DWORD)::BOOL
 end
 
+# typedef VOID ( WINAPI * LPOVERLAPPED_COMPLETION_ROUTINE
+const LPOVERLAPPED_COMPLETION_ROUTINE = Ptr{Cvoid}
+
 function CreateFileW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
     @ccall Kernel32.CreateFileW(lpFileName::LPCWSTR, dwDesiredAccess::DWORD, dwShareMode::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES, dwCreationDisposition::DWORD, dwFlagsAndAttributes::DWORD, hTemplateFile::HANDLE)::HANDLE
 end
 
 function GetFileSizeEx(hFile, lpFileSize)
     @ccall Kernel32.GetFileSizeEx(hFile::HANDLE, lpFileSize::PLARGE_INTEGER)::BOOL
+end
+
+function ReadFile(hFile, lpBuffer, nNumberOfBytesToRead, lpNumberOfBytesRead, lpOverlapped)
+    @ccall Kernel32.ReadFile(hFile::HANDLE, lpBuffer::LPVOID, nNumberOfBytesToRead::DWORD, lpNumberOfBytesRead::LPDWORD, lpOverlapped::LPOVERLAPPED)::BOOL
+end
+
+function ReadFileEx(hFile, lpBuffer, nNumberOfBytesToRead, lpOverlapped, lpCompletionRoutine)
+    @ccall Kernel32.ReadFileEx(hFile::HANDLE, lpBuffer::LPVOID, nNumberOfBytesToRead::DWORD, lpOverlapped::LPOVERLAPPED, lpCompletionRoutine::LPOVERLAPPED_COMPLETION_ROUTINE)::BOOL
 end
 
 function CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
