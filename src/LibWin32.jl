@@ -98,6 +98,8 @@ const LPCVOID = Ptr{Cvoid}
 
 const LPBYTE = Ptr{BYTE}
 
+const PBYTE = Ptr{BYTE}
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
