@@ -1,5 +1,3 @@
-module LibWin32
-
 using CEnum
 
 const Kernel32 = "kernel32.dll"
@@ -191,91 +189,91 @@ const LPOVERLAPPED = Ptr{_OVERLAPPED}
 const FARPROC = Ptr{Cvoid}
 
 function CreateFileMappingW(hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName)
-    @ccall Win32.CreateFileMappingW(hFile::HANDLE, lpFileMappingAttributes::LPSECURITY_ATTRIBUTES, flProtect::DWORD, dwMaximumSizeHigh::DWORD, dwMaximumSizeLow::DWORD, lpName::LPCWSTR)::HANDLE
+    @ccall Kernel32.CreateFileMappingW(hFile::HANDLE, lpFileMappingAttributes::LPSECURITY_ATTRIBUTES, flProtect::DWORD, dwMaximumSizeHigh::DWORD, dwMaximumSizeLow::DWORD, lpName::LPCWSTR)::HANDLE
 end
 
 function OpenFileMappingW(dwDesiredAccess, bInheritHandle, lpName)
-    @ccall Win32.OpenFileMappingW(dwDesiredAccess::DWORD, bInheritHandle::BOOL, lpName::LPCWSTR)::HANDLE
+    @ccall Kernel32.OpenFileMappingW(dwDesiredAccess::DWORD, bInheritHandle::BOOL, lpName::LPCWSTR)::HANDLE
 end
 
 function MapViewOfFile(hFileMappingObject, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap)
-    @ccall Win32.MapViewOfFile(hFileMappingObject::HANDLE, dwDesiredAccess::DWORD, dwFileOffsetHigh::DWORD, dwFileOffsetLow::DWORD, dwNumberOfBytesToMap::SIZE_T)::LPVOID
+    @ccall Kernel32.MapViewOfFile(hFileMappingObject::HANDLE, dwDesiredAccess::DWORD, dwFileOffsetHigh::DWORD, dwFileOffsetLow::DWORD, dwNumberOfBytesToMap::SIZE_T)::LPVOID
 end
 
 function GetProcessWorkingSetSize(hProcess, lpMinimumWorkingSetSize, lpMaximumWorkingSetSize)
-    @ccall Win32.GetProcessWorkingSetSize(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T)::BOOL
+    @ccall Kernel32.GetProcessWorkingSetSize(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T)::BOOL
 end
 
 function GetProcessWorkingSetSizeEx(hProcess, lpMinimumWorkingSetSize, lpMaximumWorkingSetSize, Flags)
-    @ccall Win32.GetProcessWorkingSetSizeEx(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T, Flags::PDWORD)::BOOL
+    @ccall Kernel32.GetProcessWorkingSetSizeEx(hProcess::HANDLE, lpMinimumWorkingSetSize::PSIZE_T, lpMaximumWorkingSetSize::PSIZE_T, Flags::PDWORD)::BOOL
 end
 
 function SetProcessWorkingSetSize(hProcess, dwMinimumWorkingSetSize, dwMaximumWorkingSetSize)
-    @ccall Win32.SetProcessWorkingSetSize(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T)::BOOL
+    @ccall Kernel32.SetProcessWorkingSetSize(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T)::BOOL
 end
 
 function SetProcessWorkingSetSizeEx(hProcess, dwMinimumWorkingSetSize, dwMaximumWorkingSetSize, Flags)
-    @ccall Win32.SetProcessWorkingSetSizeEx(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T, Flags::DWORD)::BOOL
+    @ccall Kernel32.SetProcessWorkingSetSizeEx(hProcess::HANDLE, dwMinimumWorkingSetSize::SIZE_T, dwMaximumWorkingSetSize::SIZE_T, Flags::DWORD)::BOOL
 end
 
 function CreateFileW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
-    @ccall Win32.CreateFileW(lpFileName::LPCWSTR, dwDesiredAccess::DWORD, dwShareMode::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES, dwCreationDisposition::DWORD, dwFlagsAndAttributes::DWORD, hTemplateFile::HANDLE)::HANDLE
+    @ccall Kernel32.CreateFileW(lpFileName::LPCWSTR, dwDesiredAccess::DWORD, dwShareMode::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES, dwCreationDisposition::DWORD, dwFlagsAndAttributes::DWORD, hTemplateFile::HANDLE)::HANDLE
 end
 
 function GetFileSizeEx(hFile, lpFileSize)
-    @ccall Win32.GetFileSizeEx(hFile::HANDLE, lpFileSize::PLARGE_INTEGER)::BOOL
+    @ccall Kernel32.GetFileSizeEx(hFile::HANDLE, lpFileSize::PLARGE_INTEGER)::BOOL
 end
 
 function CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
-    @ccall Win32.CreateNamedPipeW(lpName::LPCWSTR, dwOpenMode::DWORD, dwPipeMode::DWORD, nMaxInstances::DWORD, nOutBufferSize::DWORD, nInBufferSize::DWORD, nDefaultTimeOut::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES)::HANDLE
+    @ccall Kernel32.CreateNamedPipeW(lpName::LPCWSTR, dwOpenMode::DWORD, dwPipeMode::DWORD, nMaxInstances::DWORD, nOutBufferSize::DWORD, nInBufferSize::DWORD, nDefaultTimeOut::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES)::HANDLE
 end
 
 function WaitNamedPipeW(lpNamedPipeName, nTimeOut)
-    @ccall Win32.WaitNamedPipeW(lpNamedPipeName::LPCWSTR, nTimeOut::DWORD)::BOOL
+    @ccall Kernel32.WaitNamedPipeW(lpNamedPipeName::LPCWSTR, nTimeOut::DWORD)::BOOL
 end
 
 function CallNamedPipeW(lpNamedPipeName, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesRead, nTimeOut)
-    @ccall Win32.CallNamedPipeW(lpNamedPipeName::LPCWSTR, lpInBuffer::LPVOID, nInBufferSize::DWORD, lpOutBuffer::LPVOID, nOutBufferSize::DWORD, lpBytesRead::LPDWORD, nTimeOut::DWORD)::BOOL
+    @ccall Kernel32.CallNamedPipeW(lpNamedPipeName::LPCWSTR, lpInBuffer::LPVOID, nInBufferSize::DWORD, lpOutBuffer::LPVOID, nOutBufferSize::DWORD, lpBytesRead::LPDWORD, nTimeOut::DWORD)::BOOL
 end
 
 function ConnectNamedPipe(hNamedPipe, lpOverlapped)
-    @ccall Win32.ConnectNamedPipe(hNamedPipe::HANDLE, lpOverlapped::LPOVERLAPPED)::BOOL
+    @ccall Kernel32.ConnectNamedPipe(hNamedPipe::HANDLE, lpOverlapped::LPOVERLAPPED)::BOOL
 end
 
 function LoadLibraryExW(lpLibFileName, hFile, dwFlags)
-    @ccall Win32.LoadLibraryExW(lpLibFileName::LPCWSTR, hFile::HANDLE, dwFlags::DWORD)::HMODULE
+    @ccall Kernel32.LoadLibraryExW(lpLibFileName::LPCWSTR, hFile::HANDLE, dwFlags::DWORD)::HMODULE
 end
 
 function GetProcAddress(hModule, lpProcName)
-    @ccall Win32.GetProcAddress(hModule::HMODULE, lpProcName::LPCSTR)::FARPROC
+    @ccall Kernel32.GetProcAddress(hModule::HMODULE, lpProcName::LPCSTR)::FARPROC
 end
 
 function GetModuleHandleW(lpModuleName)
-    @ccall Win32.GetModuleHandleW(lpModuleName::LPCWSTR)::HMODULE
+    @ccall Kernel32.GetModuleHandleW(lpModuleName::LPCWSTR)::HMODULE
 end
 
 function GetLastError()
-    @ccall Win32.GetLastError()::DWORD
+    @ccall Kernel32.GetLastError()::DWORD
 end
 
 function GetCurrentProcess()
-    @ccall Win32.GetCurrentProcess()::HANDLE
+    @ccall Kernel32.GetCurrentProcess()::HANDLE
 end
 
 function GetCurrentProcessId()
-    @ccall Win32.GetCurrentProcessId()::DWORD
+    @ccall Kernel32.GetCurrentProcessId()::DWORD
 end
 
 function ExitProcess(uExitCode)
-    @ccall Win32.ExitProcess(uExitCode::UINT)::Cvoid
+    @ccall Kernel32.ExitProcess(uExitCode::UINT)::Cvoid
 end
 
 function TerminateProcess(hProcess, uExitCode)
-    @ccall Win32.TerminateProcess(hProcess::HANDLE, uExitCode::UINT)::BOOL
+    @ccall Kernel32.TerminateProcess(hProcess::HANDLE, uExitCode::UINT)::BOOL
 end
 
 function GetExitCodeProcess(hProcess, lpExitCode)
-    @ccall Win32.GetExitCodeProcess(hProcess::HANDLE, lpExitCode::LPDWORD)::BOOL
+    @ccall Kernel32.GetExitCodeProcess(hProcess::HANDLE, lpExitCode::LPDWORD)::BOOL
 end
 
 const LPCOLORREF = Ptr{DWORD}
@@ -331,43 +329,43 @@ const LPBITMAPINFO = Ptr{tagBITMAPINFO}
 const PBITMAPINFO = Ptr{tagBITMAPINFO}
 
 function CreateSolidBrush(color)
-    @ccall Win32.CreateSolidBrush(color::COLORREF)::HBRUSH
+    @ccall Gdi32.CreateSolidBrush(color::COLORREF)::HBRUSH
 end
 
 function DeleteObject(ho)
-    @ccall Win32.DeleteObject(ho::HGDIOBJ)::BOOL
+    @ccall Gdi32.DeleteObject(ho::HGDIOBJ)::BOOL
 end
 
 function CreateDIBSection(hdc, pbmi, usage, ppvBits, hSection, offset)
-    @ccall Win32.CreateDIBSection(hdc::HDC, pbmi::Ptr{BITMAPINFO}, usage::UINT, ppvBits::Ptr{Ptr{Cvoid}}, hSection::HANDLE, offset::DWORD)::HBITMAP
+    @ccall Gdi32.CreateDIBSection(hdc::HDC, pbmi::Ptr{BITMAPINFO}, usage::UINT, ppvBits::Ptr{Ptr{Cvoid}}, hSection::HANDLE, offset::DWORD)::HBITMAP
 end
 
 function CreateFontIndirectW(lplf)
-    @ccall Win32.CreateFontIndirectW(lplf::Ptr{LOGFONTW})::HFONT
+    @ccall Gdi32.CreateFontIndirectW(lplf::Ptr{LOGFONTW})::HFONT
 end
 
 function CreateCompatibleDC(hdc)
-    @ccall Win32.CreateCompatibleDC(hdc::HDC)::HDC
+    @ccall Gdi32.CreateCompatibleDC(hdc::HDC)::HDC
 end
 
 function SelectObject(hdc, h)
-    @ccall Win32.SelectObject(hdc::HDC, h::HGDIOBJ)::HGDIOBJ
+    @ccall Gdi32.SelectObject(hdc::HDC, h::HGDIOBJ)::HGDIOBJ
 end
 
 function BitBlt(hdc, x, y, cx, cy, hdcSrc, x1, y1, rop)
-    @ccall Win32.BitBlt(hdc::HDC, x::Cint, y::Cint, cx::Cint, cy::Cint, hdcSrc::HDC, x1::Cint, y1::Cint, rop::DWORD)::BOOL
+    @ccall Gdi32.BitBlt(hdc::HDC, x::Cint, y::Cint, cx::Cint, cy::Cint, hdcSrc::HDC, x1::Cint, y1::Cint, rop::DWORD)::BOOL
 end
 
 function DeleteDC(hdc)
-    @ccall Win32.DeleteDC(hdc::HDC)::BOOL
+    @ccall Gdi32.DeleteDC(hdc::HDC)::BOOL
 end
 
 function StretchBlt(hdcDest, xDest, yDest, wDest, hDest, hdcSrc, xSrc, ySrc, wSrc, hSrc, rop)
-    @ccall Win32.StretchBlt(hdcDest::HDC, xDest::Cint, yDest::Cint, wDest::Cint, hDest::Cint, hdcSrc::HDC, xSrc::Cint, ySrc::Cint, wSrc::Cint, hSrc::Cint, rop::DWORD)::BOOL
+    @ccall Gdi32.StretchBlt(hdcDest::HDC, xDest::Cint, yDest::Cint, wDest::Cint, hDest::Cint, hdcSrc::HDC, xSrc::Cint, ySrc::Cint, wSrc::Cint, hSrc::Cint, rop::DWORD)::BOOL
 end
 
 function SetStretchBltMode(hdc, mode)
-    @ccall Win32.SetStretchBltMode(hdc::HDC, mode::Cint)::Cint
+    @ccall Gdi32.SetStretchBltMode(hdc::HDC, mode::Cint)::Cint
 end
 
 const HGLOBAL = HANDLE
@@ -512,127 +510,127 @@ const CREATESTRUCTW = tagCREATESTRUCTW
 const LPCREATESTRUCTW = Ptr{tagCREATESTRUCTW}
 
 function EnumWindowsProc(hwnd, lParam)
-    @ccall Win32.EnumWindowsProc(hwnd::HWND, lParam::LPARAM)::BOOL
+    @ccall User32.EnumWindowsProc(hwnd::HWND, lParam::LPARAM)::BOOL
 end
 
 function EnumWindows(lpEnumFunc, lParam)
-    @ccall Win32.EnumWindows(lpEnumFunc::WNDENUMPROC, lParam::LPARAM)::BOOL
+    @ccall User32.EnumWindows(lpEnumFunc::WNDENUMPROC, lParam::LPARAM)::BOOL
 end
 
 function IsWindowVisible(hWnd)
-    @ccall Win32.IsWindowVisible(hWnd::HWND)::BOOL
+    @ccall User32.IsWindowVisible(hWnd::HWND)::BOOL
 end
 
 function GetWindowRect(hWnd, lpRect)
-    @ccall Win32.GetWindowRect(hWnd::HWND, lpRect::LPRECT)::BOOL
+    @ccall User32.GetWindowRect(hWnd::HWND, lpRect::LPRECT)::BOOL
 end
 
 function GetWindowTextW(hWnd, lpString, nMaxCount)
-    @ccall Win32.GetWindowTextW(hWnd::HWND, lpString::LPWSTR, nMaxCount::Cint)::Cint
+    @ccall User32.GetWindowTextW(hWnd::HWND, lpString::LPWSTR, nMaxCount::Cint)::Cint
 end
 
 function GetWindowTextLengthW(hWnd)
-    @ccall Win32.GetWindowTextLengthW(hWnd::HWND)::Cint
+    @ccall User32.GetWindowTextLengthW(hWnd::HWND)::Cint
 end
 
 function GetClientRect(hWnd, lpRect)
-    @ccall Win32.GetClientRect(hWnd::HWND, lpRect::LPRECT)::BOOL
+    @ccall User32.GetClientRect(hWnd::HWND, lpRect::LPRECT)::BOOL
 end
 
 function GetWindowLongW(hWnd, nIndex)
-    @ccall Win32.GetWindowLongW(hWnd::HWND, nIndex::Cint)::LONG
+    @ccall User32.GetWindowLongW(hWnd::HWND, nIndex::Cint)::LONG
 end
 
 function RegisterClassW(lpWndClass)
-    @ccall Win32.RegisterClassW(lpWndClass::Ptr{WNDCLASSW})::ATOM
+    @ccall User32.RegisterClassW(lpWndClass::Ptr{WNDCLASSW})::ATOM
 end
 
 function LoadIconW(hInstance, lpIconName)
-    @ccall Win32.LoadIconW(hInstance::HINSTANCE, lpIconName::LPCWSTR)::HICON
+    @ccall User32.LoadIconW(hInstance::HINSTANCE, lpIconName::LPCWSTR)::HICON
 end
 
 function LoadCursorW(hInstance, lpCursorName)
-    @ccall Win32.LoadCursorW(hInstance::HINSTANCE, lpCursorName::LPCWSTR)::HCURSOR
+    @ccall User32.LoadCursorW(hInstance::HINSTANCE, lpCursorName::LPCWSTR)::HCURSOR
 end
 
 function CreateWindowExW(dwExStyle, lpClassName, lpWindowName, dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)
-    @ccall Win32.CreateWindowExW(dwExStyle::DWORD, lpClassName::LPCWSTR, lpWindowName::LPCWSTR, dwStyle::DWORD, X::Cint, Y::Cint, nWidth::Cint, nHeight::Cint, hWndParent::HWND, hMenu::HMENU, hInstance::HINSTANCE, lpParam::LPVOID)::HWND
+    @ccall User32.CreateWindowExW(dwExStyle::DWORD, lpClassName::LPCWSTR, lpWindowName::LPCWSTR, dwStyle::DWORD, X::Cint, Y::Cint, nWidth::Cint, nHeight::Cint, hWndParent::HWND, hMenu::HMENU, hInstance::HINSTANCE, lpParam::LPVOID)::HWND
 end
 
 function DefWindowProcW(hWnd, Msg, wParam, lParam)
-    @ccall Win32.DefWindowProcW(hWnd::HWND, Msg::UINT, wParam::WPARAM, lParam::LPARAM)::LRESULT
+    @ccall User32.DefWindowProcW(hWnd::HWND, Msg::UINT, wParam::WPARAM, lParam::LPARAM)::LRESULT
 end
 
 function PostQuitMessage(nExitCode)
-    @ccall Win32.PostQuitMessage(nExitCode::Cint)::Cvoid
+    @ccall User32.PostQuitMessage(nExitCode::Cint)::Cvoid
 end
 
 function ShowWindow(hWnd, nCmdShow)
-    @ccall Win32.ShowWindow(hWnd::HWND, nCmdShow::Cint)::BOOL
+    @ccall User32.ShowWindow(hWnd::HWND, nCmdShow::Cint)::BOOL
 end
 
 function GetMessageW(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax)
-    @ccall Win32.GetMessageW(lpMsg::LPMSG, hWnd::HWND, wMsgFilterMin::UINT, wMsgFilterMax::UINT)::BOOL
+    @ccall User32.GetMessageW(lpMsg::LPMSG, hWnd::HWND, wMsgFilterMin::UINT, wMsgFilterMax::UINT)::BOOL
 end
 
 function TranslateMessage(lpMsg)
-    @ccall Win32.TranslateMessage(lpMsg::Ptr{MSG})::BOOL
+    @ccall User32.TranslateMessage(lpMsg::Ptr{MSG})::BOOL
 end
 
 function DispatchMessageW(lpMsg)
-    @ccall Win32.DispatchMessageW(lpMsg::Ptr{MSG})::LRESULT
+    @ccall User32.DispatchMessageW(lpMsg::Ptr{MSG})::LRESULT
 end
 
 function BeginPaint(hWnd, lpPaint)
-    @ccall Win32.BeginPaint(hWnd::HWND, lpPaint::LPPAINTSTRUCT)::HDC
+    @ccall User32.BeginPaint(hWnd::HWND, lpPaint::LPPAINTSTRUCT)::HDC
 end
 
 function EndPaint(hWnd, lpPaint)
-    @ccall Win32.EndPaint(hWnd::HWND, lpPaint::Ptr{PAINTSTRUCT})::BOOL
+    @ccall User32.EndPaint(hWnd::HWND, lpPaint::Ptr{PAINTSTRUCT})::BOOL
 end
 
 function FillRect(hDC, lprc, hbr)
-    @ccall Win32.FillRect(hDC::HDC, lprc::Ptr{RECT}, hbr::HBRUSH)::Cint
+    @ccall User32.FillRect(hDC::HDC, lprc::Ptr{RECT}, hbr::HBRUSH)::Cint
 end
 
 function MoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint)
-    @ccall Win32.MoveWindow(hWnd::HWND, X::Cint, Y::Cint, nWidth::Cint, nHeight::Cint, bRepaint::BOOL)::BOOL
+    @ccall User32.MoveWindow(hWnd::HWND, X::Cint, Y::Cint, nWidth::Cint, nHeight::Cint, bRepaint::BOOL)::BOOL
 end
 
 function RegisterHotKey(hWnd, id, fsModifiers, vk)
-    @ccall Win32.RegisterHotKey(hWnd::HWND, id::Cint, fsModifiers::UINT, vk::UINT)::BOOL
+    @ccall User32.RegisterHotKey(hWnd::HWND, id::Cint, fsModifiers::UINT, vk::UINT)::BOOL
 end
 
 function GetWindowLongPtrW(hWnd, nIndex)
-    @ccall Win32.GetWindowLongPtrW(hWnd::HWND, nIndex::Cint)::LONG_PTR
+    @ccall User32.GetWindowLongPtrW(hWnd::HWND, nIndex::Cint)::LONG_PTR
 end
 
 function SendMessageW(hWnd, Msg, wParam, lParam)
-    @ccall Win32.SendMessageW(hWnd::HWND, Msg::UINT, wParam::WPARAM, lParam::LPARAM)::LRESULT
+    @ccall User32.SendMessageW(hWnd::HWND, Msg::UINT, wParam::WPARAM, lParam::LPARAM)::LRESULT
 end
 
 function SystemParametersInfoW(uiAction, uiParam, pvParam, fWinIni)
-    @ccall Win32.SystemParametersInfoW(uiAction::UINT, uiParam::UINT, pvParam::PVOID, fWinIni::UINT)::BOOL
+    @ccall User32.SystemParametersInfoW(uiAction::UINT, uiParam::UINT, pvParam::PVOID, fWinIni::UINT)::BOOL
 end
 
 function SetCursor(hCursor)
-    @ccall Win32.SetCursor(hCursor::HCURSOR)::HCURSOR
+    @ccall User32.SetCursor(hCursor::HCURSOR)::HCURSOR
 end
 
 function GetCursorPos(lpPoint)
-    @ccall Win32.GetCursorPos(lpPoint::LPPOINT)::BOOL
+    @ccall User32.GetCursorPos(lpPoint::LPPOINT)::BOOL
 end
 
 function GetDC(hWnd)
-    @ccall Win32.GetDC(hWnd::HWND)::HDC
+    @ccall User32.GetDC(hWnd::HWND)::HDC
 end
 
 function ReleaseDC(hWnd, hDC)
-    @ccall Win32.ReleaseDC(hWnd::HWND, hDC::HDC)::Cint
+    @ccall User32.ReleaseDC(hWnd::HWND, hDC::HDC)::Cint
 end
 
 function SetWindowLongPtrW(hWnd, nIndex, dwNewLong)
-    @ccall Win32.SetWindowLongPtrW(hWnd::HWND, nIndex::Cint, dwNewLong::LONG_PTR)::LONG_PTR
+    @ccall User32.SetWindowLongPtrW(hWnd::HWND, nIndex::Cint, dwNewLong::LONG_PTR)::LONG_PTR
 end
 
 struct _GUID
@@ -704,7 +702,7 @@ const NOTIFYICONDATAW = _NOTIFYICONDATAW
 const PNOTIFYICONDATAW = Ptr{_NOTIFYICONDATAW}
 
 function Shell_NotifyIconW(dwMessage, lpData)
-    @ccall Win32.Shell_NotifyIconW(dwMessage::DWORD, lpData::PNOTIFYICONDATAW)::BOOL
+    @ccall ShellApi.Shell_NotifyIconW(dwMessage::DWORD, lpData::PNOTIFYICONDATAW)::BOOL
 end
 
 @cenum _LI_METRIC::UInt32 begin
@@ -713,7 +711,7 @@ end
 end
 
 function LoadIconMetric(hinst, pszName, lims, phico)
-    @ccall Win32.LoadIconMetric(hinst::HINSTANCE, pszName::PCWSTR, lims::Cint, phico::Ptr{HICON})::HRESULT
+    @ccall CommCtrl.LoadIconMetric(hinst::HINSTANCE, pszName::PCWSTR, lims::Cint, phico::Ptr{HICON})::HRESULT
 end
 
 struct var"##Ctag#227"
@@ -2057,6 +2055,4 @@ const NIM_SETFOCUS = 0x00000003
 const NIM_SETVERSION = 0x00000004
 
 nothing
-
-end
 
