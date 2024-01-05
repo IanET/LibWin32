@@ -232,6 +232,10 @@ function GetFileSizeEx(hFile, lpFileSize)
     @ccall Kernel32.GetFileSizeEx(hFile::HANDLE, lpFileSize::PLARGE_INTEGER)::BOOL
 end
 
+function CreateEventW(lpEventAttributes, bManualReset, bInitialState, lpName)
+    @ccall Win32.CreateEventW(lpEventAttributes::LPSECURITY_ATTRIBUTES, bManualReset::BOOL, bInitialState::BOOL, lpName::LPCWSTR)::HANDLE
+end
+
 function CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
     @ccall Kernel32.CreateNamedPipeW(lpName::LPCWSTR, dwOpenMode::DWORD, dwPipeMode::DWORD, nMaxInstances::DWORD, nOutBufferSize::DWORD, nInBufferSize::DWORD, nDefaultTimeOut::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES)::HANDLE
 end
@@ -282,6 +286,14 @@ end
 
 function GetExitCodeProcess(hProcess, lpExitCode)
     @ccall Kernel32.GetExitCodeProcess(hProcess::HANDLE, lpExitCode::LPDWORD)::BOOL
+end
+
+function SetEvent(hEvent)
+    @ccall Kernel32.SetEvent(hEvent::HANDLE)::BOOL
+end
+
+function ResetEvent(hEvent)
+    @ccall Kernel32.ResetEvent(hEvent::HANDLE)::BOOL
 end
 
 const LPCOLORREF = Ptr{DWORD}
