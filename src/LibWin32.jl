@@ -296,6 +296,10 @@ function ResetEvent(hEvent)
     @ccall Kernel32.ResetEvent(hEvent::HANDLE)::BOOL
 end
 
+function WaitForSingleObject(hHandle, dwMilliseconds)
+    @ccall Kernel32.WaitForSingleObject(hHandle::HANDLE, dwMilliseconds::DWORD)::DWORD
+end
+
 const LPCOLORREF = Ptr{DWORD}
 
 const HGDIOBJ = HANDLE
