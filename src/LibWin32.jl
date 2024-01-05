@@ -817,6 +817,8 @@ const FALSE = 0
 
 const LF_FACESIZE = 32
 
+const INFINITE = 0xffffffff
+
 const SECTION_MAP_WRITE = 0x0002
 
 const FILE_MAP_WRITE = SECTION_MAP_WRITE
