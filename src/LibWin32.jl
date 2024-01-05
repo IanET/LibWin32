@@ -1,3 +1,5 @@
+module LibWin32
+
 using CEnum
 
 const Kernel32 = "kernel32.dll"
@@ -2056,3 +2058,4 @@ const NIM_SETVERSION = 0x00000004
 
 nothing
 
+end # module
