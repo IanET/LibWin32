@@ -96,6 +96,8 @@ const PWORD = Ptr{WORD}
 
 const LPCVOID = Ptr{Cvoid}
 
+const LPBYTE = Ptr{BYTE}
+
 struct tagLOGFONTW
     lfHeight::LONG
     lfWidth::LONG
@@ -961,6 +963,20 @@ const FILE_ATTRIBUTE_RECALL_ON_DATA_ACCESS = 0x00400000
 const STATUS_WAIT_0 = DWORD(Clong(0x00000000))
 
 const WAIT_OBJECT_0 = STATUS_WAIT_0 + 0
+
+const NMPWAIT_WAIT_FOREVER = 0xffffffff
+
+const NMPWAIT_NOWAIT = 0x00000001
+
+const NMPWAIT_USE_DEFAULT_WAIT = 0x00000000
+
+const GENERIC_READ = Clong(0x80000000)
+
+const GENERIC_WRITE = Clong(0x40000000)
+
+const GENERIC_EXECUTE = Clong(0x20000000)
+
+# Skipping MacroDefinition: GENERIC_ALL ( 0x10000000L
 
 const PIPE_WAIT = 0x00000000
 
