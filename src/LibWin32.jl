@@ -245,14 +245,6 @@ function ReadFileEx(hFile, lpBuffer, nNumberOfBytesToRead, lpOverlapped, lpCompl
     @ccall Kernel32.ReadFileEx(hFile::HANDLE, lpBuffer::LPVOID, nNumberOfBytesToRead::DWORD, lpOverlapped::LPOVERLAPPED, lpCompletionRoutine::LPOVERLAPPED_COMPLETION_ROUTINE)::BOOL
 end
 
-function CloseHandle(hObject)
-    @ccall Win32.CloseHandle(hObject::HANDLE)::BOOL
-end
-
-function DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess, bInheritHandle, dwOptions)
-    @ccall Win32.DuplicateHandle(hSourceProcessHandle::HANDLE, hSourceHandle::HANDLE, hTargetProcessHandle::HANDLE, lpTargetHandle::LPHANDLE, dwDesiredAccess::DWORD, bInheritHandle::BOOL, dwOptions::DWORD)::BOOL
-end
-
 function CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
     @ccall Kernel32.CreateNamedPipeW(lpName::LPCWSTR, dwOpenMode::DWORD, dwPipeMode::DWORD, nMaxInstances::DWORD, nOutBufferSize::DWORD, nInBufferSize::DWORD, nDefaultTimeOut::DWORD, lpSecurityAttributes::LPSECURITY_ATTRIBUTES)::HANDLE
 end
@@ -319,6 +311,14 @@ end
 
 function WaitForSingleObject(hHandle, dwMilliseconds)
     @ccall Kernel32.WaitForSingleObject(hHandle::HANDLE, dwMilliseconds::DWORD)::DWORD
+end
+
+function CloseHandle(hObject)
+    @ccall Kernel32.CloseHandle(hObject::HANDLE)::BOOL
+end
+
+function DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess, bInheritHandle, dwOptions)
+    @ccall Kernel32.DuplicateHandle(hSourceProcessHandle::HANDLE, hSourceHandle::HANDLE, hTargetProcessHandle::HANDLE, lpTargetHandle::LPHANDLE, dwDesiredAccess::DWORD, bInheritHandle::BOOL, dwOptions::DWORD)::BOOL
 end
 
 const LPCOLORREF = Ptr{DWORD}
